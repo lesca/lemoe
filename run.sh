@@ -1,13 +1,11 @@
 #!/bin/bash
 
-# Set default user
-DISTRO_USER_FILE=.lemoe_user
-if [ ! -f "$DISTRO_USER_FILE" ]; then
-    echo lemoe > $HOME/$DISTRO_USER_FILE
+# Load user config
+DISTRO_USER_CONFIG=$HOME/.lemoe
+if [ ! -f "$DISTRO_USER_CONFIG" ]; then
+    echo "DISTRO_USER=Lemoe" > $DISTRO_USER_CONFIG
 fi
-
-# Read the first line from the file
-read -r DISTRO_USER < $HOME/$DISTRO_USER_FILE
+source $DISTRO_USER_CONFIG
 
 # user parameters
 BINDS=" --bind /storage/emulated/0/Documents:/media/documents"
