@@ -13,7 +13,6 @@ fi
 # user parameters
 BINDS=" --bind /storage/emulated/0/Documents:/media/documents"
 BINDS=$BINDS" --bind /storage/emulated/0/Download:/media/downloads"
-BINDS=$BINDS" --bind $HOME/something:/proc/bus/pci/devices"
 
 # system parameters
 DISTRO=archlinux
