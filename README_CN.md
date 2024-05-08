@@ -38,7 +38,7 @@ git clone https://github.com/lesca/lemoe.git
 
 ```
 cd lemoe
-bash run-archlinux.sh
+bash run.sh
 ```
 
 > [!TIP]
@@ -51,13 +51,13 @@ bash run-archlinux.sh
 确保你的设备能够顺畅访问 github，然后运行以下命令：
 
 ```
-bash run-archlinux.sh build
+bash run.sh build
 ``` 
 
 默认的用户名是 **lemoe**。如果你想用另一个用户名，可以在命令的末尾添加，像这样：
 
 ```
-bash run-archlinux.sh build your_name
+bash run.sh build your_name
 ```
 
 用户名会被保存在 `.lemoe_user` 文件中，供下次运行使用。
@@ -67,13 +67,13 @@ bash run-archlinux.sh build your_name
 运行以下命令来备份 ArchLinux 镜像。这将包括系统中的所有文件以及用户的配置文件。镜像被保存在 `lemoe/distro-backup` 文件夹。
 
 ```
-bash run-archlinux.sh backup_distro
+bash run.sh backup_distro
 ```
 
 默认的文件名是 `archlinux-base.tar.gz`。如果文件已存在，备份将失败。你需要删除该文件，或在命令末尾指定另一个名称来创建新的文件，如下所示：
 
 ```
-bash run-archlinux.sh backup_distro name
+bash run.sh backup_distro name
 ```
 
 它将保存为 archlinux-**name**.tar.gz
@@ -83,37 +83,37 @@ bash run-archlinux.sh backup_distro name
 恢复 base 镜像：
 
 ```
-bash run-archlinux.sh restore_distro
+bash run.sh restore_distro
 ```
 
 恢复自定义镜像：
 
 ```
-bash run-archlinux.sh restore_distro name
+bash run.sh restore_distro name
 ```
 
 ## 备份和恢复配置文件
 
 ```
-bash run-archlinux.sh backup_profile
+bash run.sh backup_profile
 ```
 
 此命令保存两个配置文件：
 
 * 发行版用户配置文件：备份 ArchLinux 中 `$HOME` 目录的文件。
   * 默认文件名为 `archlinux-profile.tar.gz`。
-  * 此备份可以通过 `bash run-archlinux.sh restore_profile` 手动恢复。
+  * 此备份可以通过 `bash run.sh restore_profile` 手动恢复。
 * termux 用户配置文件：备份 termux 中 `$HOME` 目录的文件。
   * 默认文件名为 `termux-profile.tar.gz`。
   * 当执行 `setup_termux` 时，此备份会自动使用。
-  * 此备份可以通过 `bash run-archlinux.sh restore_termux` 手动恢复。
+  * 此备份可以通过 `bash run.sh restore_termux` 手动恢复。
 
 所有备份文件都保存在 `lemoe/profile-backup` 文件夹。
 
 通常，你可以在命令末尾添加你的自定义名称，以创建自己的备份，以供进一步使用或测试。
 
 ```
-bash run-archlinux.sh backup_profile name
+bash run.sh backup_profile name
 ```
 
 如果你想恢复它，使用相同的名称。
@@ -123,7 +123,7 @@ bash run-archlinux.sh backup_profile name
 这将完全移除 ArchLinux proot 并从 base 镜像中恢复。
 
 ```
-bash run-archarchlinux.sh reset
+bash run.sh reset
 ```
 
 ## 登录
@@ -131,13 +131,13 @@ bash run-archarchlinux.sh reset
 默认情况下，以下命令以 root 身份登录。
 
 ```
-bash run-archlinux.sh login
+bash run.sh login
 ```
 
 你可以指定另一个用户进行登录，例如：
 
 ```
-bash run-archlinux.sh login lemoe
+bash run.sh login lemoe
 ```
 
 
@@ -156,7 +156,7 @@ bash run-archlinux.sh login lemoe
 3. 如果仍然不工作，请运行以下命令：
 
 ```
-bash run-archlinux.sh fix_audio
+bash run.sh fix_audio
 ```
 
 这将 `pulseaudio` 模块从 `load-module module-sles-sink` 更改为 `load-module module-aaudio-sink`。
