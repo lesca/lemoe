@@ -4,9 +4,9 @@
 DISTRO_USER_FILE=.lemoe_user
 if [ -f "$DISTRO_USER_FILE" ]; then
     # Read the first line from the file
-    read -r DISTRO_USER < $DISTRO_USER_FILE
+    read -r DISTRO_USER < $HOME/$DISTRO_USER_FILE
 else
-    echo lemoe > $DISTRO_USER_FILE
+    echo lemoe > $HOME/$DISTRO_USER_FILE
     DISTRO_USER=lemoe
 fi
 
