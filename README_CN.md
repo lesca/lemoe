@@ -32,7 +32,7 @@ git clone https://github.com/lesca/lemoe.git
 
 4. 下载发行版镜像
 
-如果你不想自己构建镜像，你可以从[release](https://github.com/lesca/lemoe/releases)下载镜像，并将其放入 `lemoe/distro_backup` 文件夹。
+如果你不想自己构建镜像，你可以[下载 base 镜像](https://github.com/lesca/lemoe/wiki/Download)，并将其放入 `lemoe/distro_backup` 文件夹。
 
 5. 首次运行
 

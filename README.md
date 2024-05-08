@@ -30,9 +30,9 @@ An easy-to-use command-line tool to deploy ArchiLinux distribution with X11 in t
 git clone https://github.com/lesca/lemoe.git
 ```
 
-4. Download distro image
+4. Download distro base image
 
-If you don't wan't to build your own image, you can download the image from [releases](https://github.com/lesca/lemoe/releases) and put it into the `lemoe/distro_backup` folder.
+If you don't wan't to build your own image, you can [download](https://github.com/lesca/lemoe/wiki/Download) the base image and put it into the `lemoe/distro_backup` folder.
 
 5. Your first run
 
