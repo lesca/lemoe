@@ -51,11 +51,6 @@ setup_termux() {
     if [ -e /system/framework/hwEmui.jar ]; then
         fix_audio
     fi
-
-    # restore termux.properties
-    if [ -e $SCRIPT_DIR/termux.properties ]; then
-        cp $SCRIPT_DIR/termux.properties $HOME/.termux/termux.properties
-    fi
 }
 
 install_distro() {
@@ -255,7 +250,7 @@ restore_termux() {
     # Check if termux profile exists
     if [ -e $TERMUX_PROFILE ]; then
         echo "Restore termux profile from $TERMUX_PROFILE"
-        tar -czf $TERMUX_PROFILE -C $HOME .*
+        tar -xzf $TERMUX_PROFILE -C $HOME
     else
         echo "Skipped! Not found $TERMUX_PROFILE"
     fi
