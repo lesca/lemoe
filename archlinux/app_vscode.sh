@@ -7,7 +7,7 @@ install_vscode() {
     fi
 
     git clone https://aur.archlinux.org/visual-studio-code-bin.git $PREFIX/tmp/vscode
-    $DISTRO_LOGIN --shared-tmp --user $DISTRO_USER -- bash -c 'cd /tmp/vscode && makepkg -sri --noconfirm'
+    $DISTRO_LOGIN --user $DISTRO_USER -- bash -c 'cd /tmp/vscode && makepkg -sri --noconfirm'
 }
 
 # post setup after installation

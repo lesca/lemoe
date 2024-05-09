@@ -36,10 +36,8 @@ install_distro() {
         proot-distro install $DISTRO
     fi
 
-    # setup repo and sync
-    $DISTRO_LOGIN -- sed -i "s|http://mirror.archlinuxarm.org|http://mirrors.bfsu.edu.cn/archlinuxarm|g" /etc/pacman.d/mirrorlist
-    $DISTRO_LOGIN -- pacman -Syyu --noconfirm
-    $DISTRO_LOGIN -- pacman -S --noconfirm man sudo wget vim base-devel
+    # init setup for distribution
+    init_distro
 
     # setup distro user
     setup_distro_user
@@ -88,6 +86,35 @@ build() {
     # build distro
     setup_termux
     install_distro
+}
+
+config() {
+    # config file is .lemoe
+    if [ ! -f "$DISTRO_USER_CONFIG" ]; then
+        echo "DISTRO_USER=Lemoe" > $DISTRO_USER_CONFIG
+        echo "DISTRO=debian" >> $DISTRO_USER_CONFIG
+    fi
+
+    if [ "$2" == "" ]; then
+        echo "Empty parameter. Skip."
+        return
+    fi
+
+    case "$1" in
+      user)
+        grep -q "DISTRO_USER=" $DISTRO_USER_CONFIG \
+            && sed -i "s|DISTRO_USER=.*$|DISTRO_USER=$2|g" $DISTRO_USER_CONFIG \
+            || echo "DISTRO_USER=$2" >> $DISTRO_USER_CONFIG
+        ;;
+      distro)
+        grep -q "DISTRO=" $DISTRO_USER_CONFIG \
+            && sed -i "s|DISTRO=.*$|DISTRO=$2|g" $DISTRO_USER_CONFIG \
+            || echo "DISTRO=$2" >> $DISTRO_USER_CONFIG
+        ;;
+      *)
+        echo "Invalid config parameter $1"
+        ;;
+    esac
 }
 
 precheck() {
