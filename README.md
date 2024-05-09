@@ -38,7 +38,7 @@ If you don't wan't to build your own image, you can [download](https://github.co
 
 ```
 cd lemoe
-bash run.sh
+bash lemoe.sh
 ```
 
 > [!TIP]
@@ -51,13 +51,13 @@ bash run.sh
 Make sure you have good Internet connectivity to github, and run below command:
 
 ```
-bash run.sh build
+bash lemoe.sh build
 ``` 
 
 By default, the user name is **lemoe**. If you want a different one, append it to the end, like this:
 
 ```
-bash run.sh build your_name
+bash lemoe.sh build your_name
 ```
 
 The user name is saved to `.lemoe_user` file for next run.
@@ -67,13 +67,13 @@ The user name is saved to `.lemoe_user` file for next run.
 Run command below to backup ArchLinux image. This includes all files in the system, as well as user's profile. The image is saved in `lemoe/distro-backup` folder.
 
 ```
-bash run.sh backup_distro
+bash lemoe.sh backup_distro
 ```
 
 By default, the file name is `archlinux-base.tar.gz`. If the file exists, backup will fail. You need to remove the file, or specify another name to the end of the command to create another one, like this:
 
 ```
-bash run.sh backup_distro name
+bash lemoe.sh backup_distro name
 ```
 
 It will save the image as archlinux-**name**.tar.gz
@@ -83,37 +83,37 @@ It will save the image as archlinux-**name**.tar.gz
 Restore the base image:
 
 ```
-bash run.sh restore_distro
+bash lemoe.sh restore_distro
 ```
 
 Restore a custom image:
 
 ```
-bash run.sh restore_distro name
+bash lemoe.sh restore_distro name
 ```
 
 ## Backup and restore profile
 
 ```
-bash run.sh backup_profile
+bash lemoe.sh backup_profile
 ```
 
 This command saves two profiles:
 
 * distro user profile: backup files in `$HOME` of the ArchLinux. 
   * Default file name is `archlinux-profile.tar.gz`.
-  * This backup can be manually restored by `bash run.sh restore_profile`
+  * This backup can be manually restored by `bash lemoe.sh restore_profile`
 * termux user profile: backup files in `$HOME` of termux.
   * Default file name is `termux-profile.tar.gz`.
   * This backup is automatically used when `setup_termux` is executed. 
-  * This backup can be manually restored by `bash run.sh restore_termux`
+  * This backup can be manually restored by `bash lemoe.sh restore_termux`
 
 Both backup files are saved in `lemoe/profile-backup` folder.
 
 As usual, you can append your custom name to the end to create your own backup for further use or testing purpose. 
 
 ```
-bash run.sh backup_profile name
+bash lemoe.sh backup_profile name
 ```
 
 Use the same name if you want to restore it.
@@ -123,7 +123,7 @@ Use the same name if you want to restore it.
 Remove the ArchLinux proot completely and restore it from base image.
 
 ```
-bash run.sh reset
+bash lemoe.sh reset
 ```
 
 ## Login 
@@ -131,13 +131,13 @@ bash run.sh reset
 By default, below command login as root.
 
 ```
-bash run.sh login
+bash lemoe.sh login
 ```
 
 You can specify another user to login, e.g.:
 
 ```
-bash run.sh login lemoe
+bash lemoe.sh login lemoe
 ```
 
 
@@ -156,7 +156,7 @@ Try the following:
 2. If still not working, run below command:
 
 ```
-bash run.sh fix_audio
+bash lemoe.sh fix_audio
 ```
 
 This changes the `pulseaudio` module from `load-module module-sles-sink` to `load-module module-aaudio-sink`.
