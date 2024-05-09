@@ -13,8 +13,8 @@ setup_termux() {
 
     # Check if the package x11-repo is installed
     if [ $(dpkg --list | grep x11-repo | wc -l) -eq 0 ]; then
-        termux-change-repo
-        pkg update -y
+        grep -q "https://packages-cf.termux.org" $PREFIX/etc/apt/sources.list && termux-change-repo
+        pkg update -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
         pkg install -y x11-repo
         termux-change-repo
     fi

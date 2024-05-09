@@ -26,19 +26,22 @@
 
 3. 克隆代码库
 
+可以将代码库克隆到设备的`Documents`目录下。第5步将以此为基础。
+
 ```
 git clone https://github.com/lesca/lemoe.git
 ```
 
 4. 下载发行版镜像
 
-如果你不想自己构建镜像，你可以[下载 base 镜像](https://github.com/lesca/lemoe/wiki/Download)，并将其放入 `lemoe/distro_backup` 文件夹。
+你可以[下载 base 镜像](https://github.com/lesca/lemoe/wiki/Download)，并将其放入 `lemoe/distro_backup` 文件夹。
+
+另外，你也可以自行构建镜像，命令为 `lemoe.sh build`。
 
 5. 首次运行
 
 ```
-cd lemoe
-bash lemoe.sh
+termux-change-repo && pkg install termux-am && termux-setup-storage && ln -s storage/documents/lemoe && bash lemoe/lemoe.sh
 ```
 
 > [!TIP]

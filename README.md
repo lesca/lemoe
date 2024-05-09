@@ -26,19 +26,22 @@ An easy-to-use command-line tool to deploy ArchiLinux distribution with X11 in t
 
 3. Clone this repo
 
+Clone the repo to the `Documents` folder on your device. Step 5 is based on this assumuption. 
+
 ```
 git clone https://github.com/lesca/lemoe.git
 ```
 
 4. Download distro base image
 
-If you don't wan't to build your own image, you can [download](https://github.com/lesca/lemoe/wiki/Download) the base image and put it into the `lemoe/distro_backup` folder.
+You can [download](https://github.com/lesca/lemoe/wiki/Download) the base image and put it into the `lemoe/distro_backup` folder.
+
+Optionally, you can build your own image by running `lemoe.sh build`.
 
 5. Your first run
 
 ```
-cd lemoe
-bash lemoe.sh
+termux-change-repo && pkg install termux-am && termux-setup-storage && ln -s storage/documents/lemoe && bash lemoe/lemoe.sh
 ```
 
 > [!TIP]
