@@ -137,7 +137,7 @@ bash lemoe.sh login
 你可以指定另一个用户进行登录，例如：
 
 ```
-bash lemoe.sh login lemoe
+bash lemoe.sh login Lemoe
 ```
 
 

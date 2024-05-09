@@ -137,7 +137,7 @@ bash lemoe.sh login
 You can specify another user to login, e.g.:
 
 ```
-bash lemoe.sh login lemoe
+bash lemoe.sh login Lemoe
 ```
 
 
