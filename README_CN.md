@@ -10,7 +10,7 @@
 
 ## 特性：
 
-* Lemoe 通过一条命令即可部署并启动 ArchLinux 发行版，并提供 X11 图形界面支持。
+* Lemoe 通过一条命令即可部署并启动 Linux 发行版，并提供 X11 图形界面支持。
 * Lemoe 使用 `termux:x11` 来获得比 VNC 更好的图形性能。
 * Lemoe 注重生产力工具，预装了 chromium、vscode、fcitx5 等。
 * Lemoe 可以轻松 **备份/恢复** 发行版镜像。
@@ -67,19 +67,21 @@ bash lemoe.sh build your_name
 
 ## 备份镜像
 
-运行以下命令来备份 ArchLinux 镜像。这将包括系统中的所有文件以及用户的配置文件。镜像被保存在 `lemoe/distro-backup` 文件夹。
+运行以下命令来备份 Linux 镜像。这将包括系统中的所有文件以及用户的配置文件。镜像被保存在 `lemoe/distro-backup` 文件夹。
 
 ```
 bash lemoe.sh backup_distro
 ```
 
-默认的文件名是 `archlinux-base.tar.gz`。如果文件已存在，备份将失败。你需要删除该文件，或在命令末尾指定另一个名称来创建新的文件，如下所示：
+默认的文件名是 `$DISTRO-base.tar.gz`，其中`$DISTRO`是环境中指定的发行版。
+
+例如，环境变量`DISTRO=debian`，那么文件名为`debian-base.tar.gz`。如果文件已存在，备份将失败。你需要删除该文件，或在命令末尾指定另一个名称来创建新的文件，如下所示：
 
 ```
 bash lemoe.sh backup_distro name
 ```
 
-它将保存为 archlinux-**name**.tar.gz
+本例中，它将保存为 `debian-name.tar.gz`。
 
 ## 恢复镜像
 
@@ -103,8 +105,8 @@ bash lemoe.sh backup_profile
 
 此命令保存两个配置文件：
 
-* 发行版用户配置文件：备份 ArchLinux 中 `$HOME` 目录的文件。
-  * 默认文件名为 `archlinux-profile.tar.gz`。
+* 发行版用户配置文件：备份 Linux 中 `$HOME` 目录的文件。
+  * 默认文件名为 `$DISTRO-profile.tar.gz`。
   * 此备份可以通过 `bash lemoe.sh restore_profile` 手动恢复。
 * termux 用户配置文件：备份 termux 中 `$HOME` 目录的文件。
   * 默认文件名为 `termux-profile.tar.gz`。
@@ -123,7 +125,7 @@ bash lemoe.sh backup_profile name
 
 ## 重置
 
-这将完全移除 ArchLinux proot 并从 base 镜像中恢复。
+下面的命令将完全移除已安装的 Linux 系统，然后从 base 镜像中恢复。
 
 ```
 bash lemoe.sh reset

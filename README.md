@@ -10,7 +10,7 @@ An easy-to-use command-line tool to deploy ArchiLinux distribution with X11 in t
 
 ## Features:
 
-* Lemoe deploys and starts up a ArchLinux distribution with X11 with one single command.
+* Lemoe deploys and starts up a Linux distribution with X11 with one single command.
 * Lemoe uses `termux:x11` for better graphical performance, in comparison to VNC.
 * Lemoe focuses on productivity, it pre-installs chromium, vscode, fcitx5, etc.
 * Lemoe can **backup / restore** distribution images easily.
@@ -67,19 +67,21 @@ The user name is saved to `.lemoe_user` file for next run.
 
 ## Backup image
 
-Run command below to backup ArchLinux image. This includes all files in the system, as well as user's profile. The image is saved in `lemoe/distro-backup` folder.
+Run command below to backup Linux image. This includes all files in the system, as well as user's profile. The image is saved in `lemoe/distro-backup` folder.
 
 ```
 bash lemoe.sh backup_distro
 ```
 
-By default, the file name is `archlinux-base.tar.gz`. If the file exists, backup will fail. You need to remove the file, or specify another name to the end of the command to create another one, like this:
+By default, the file name is `$DISTRO-base.tar.gz`, where `$DISTRO` is the distribution you set. 
+
+For example, `DISTRO=debian`, then the file name is `debian-base.tar.gz`. If the file exists, backup will fail. You need to remove the file, or specify another name to the end of the command to create another one, like this:
 
 ```
 bash lemoe.sh backup_distro name
 ```
 
-It will save the image as archlinux-**name**.tar.gz
+In this case, it will save the image as `debian-name.tar.gz`
 
 ## Restore image
 
@@ -103,8 +105,8 @@ bash lemoe.sh backup_profile
 
 This command saves two profiles:
 
-* distro user profile: backup files in `$HOME` of the ArchLinux. 
-  * Default file name is `archlinux-profile.tar.gz`.
+* distro user profile: backup files in `$HOME` of the prrot Linux. 
+  * Default file name is `$DISTRO-profile.tar.gz`.
   * This backup can be manually restored by `bash lemoe.sh restore_profile`
 * termux user profile: backup files in `$HOME` of termux.
   * Default file name is `termux-profile.tar.gz`.
@@ -123,7 +125,7 @@ Use the same name if you want to restore it.
 
 ## Reset
 
-Remove the ArchLinux proot completely and restore it from base image.
+Command below removes the installed Linux system completely and restore it from base image.
 
 ```
 bash lemoe.sh reset
