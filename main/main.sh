@@ -39,10 +39,10 @@ install_distro() {
     # init setup for distribution
     init_distro
 
-    # setup distro user
+    # create distro user profile
     setup_distro_user
 
-    # installation
+    # install apps
     for app in "${apps_install[@]}"; do
         echo "Installing $app ..."
         install_cmd="install_$app"
@@ -53,53 +53,56 @@ install_distro() {
         $setup_cmd
     done
 
+    # setup distro user apps
+    setup_user_apps
+
+    # cleanup distro
+    cleanup_distro
+
     # finished
     echo "Finished."
 
 }
 
 setup_distro_user() {
-    # return if user already setup
-    if [ "$LOGIN_USER" == "root" ] || [ -d $DISTRO_ROOTFS/home/$LOGIN_USER ] ; then
-        echo "Login as user $LOGIN_USER ..."
-        return
-    fi
-
     # setup user
     ETC="$DISTRO_ROOTFS/etc"
-    LINE="$LOGIN_USER ALL=(ALL:ALL) NOPASSWD: ALL"
+    LINE="$DISTRO_USER ALL=(ALL:ALL) NOPASSWD: ALL"
     FILE="$ETC/sudoers.d/$DISTRO"
 
-    echo "Setting up distro user $LOGIN_USER ..."
+    echo "Setting up distro user $DISTRO_USER ..."
 
     # create a new user
-    $DISTRO_LOGIN -- useradd -m -G root -s /bin/bash $LOGIN_USER
+    $DISTRO_LOGIN -- useradd -m -G root -s /bin/bash $DISTRO_USER
 
     # enable sudo for this user
     touch $FILE
     if ! grep -q "$LINE" $FILE; then
         echo "$LINE" >> $FILE
     fi
+}
 
-    # user environment setup
+setup_user_apps() {
+    # user apps post setup
     for app in "${apps_install[@]}"; do
         if declare -F | grep -q " setup_user_$app$"; then
-            echo "Post setup $app for user..."
+            echo "Post setup $app for user $DISTRO_USER ..."
             setup_cmd="setup_user_$app"
             $setup_cmd
         fi
     done
-
-    # Finished
-    echo "Finished."
 }
 
 build() {
-    [ ! "$1" == "" ] && DISTRO_USER=$1
-    echo $DISTRO_USER > $DISTRO_USER_FILE
+    if [ ! "$1" == "" ]; then
+        config distro $1
+        echo "DISTRO is set to $DISTRO, run 'bash lemoe.sh build' to build image."
+        exit
+    fi
+
 
     # Display the value of DISTRO_USER
-    echo "DISTRO_USER is set to: $DISTRO_USER"
+    echo "DISTRO is set to: $DISTRO"
 
     # build distro
     setup_termux
@@ -120,11 +123,13 @@ config() {
 
     case "$1" in
       user)
+        DISTRO_USER=$2
         grep -q "DISTRO_USER=" $DISTRO_USER_CONFIG \
             && sed -i "s|DISTRO_USER=.*$|DISTRO_USER=$2|g" $DISTRO_USER_CONFIG \
             || echo "DISTRO_USER=$2" >> $DISTRO_USER_CONFIG
         ;;
       distro)
+        DISTRO=$2
         grep -q "DISTRO=" $DISTRO_USER_CONFIG \
             && sed -i "s|DISTRO=.*$|DISTRO=$2|g" $DISTRO_USER_CONFIG \
             || echo "DISTRO=$2" >> $DISTRO_USER_CONFIG
@@ -136,29 +141,33 @@ config() {
 }
 
 precheck() {
-    # ensure proot-distro
+    # ensure proot-distro is installed
     if [ $(dpkg --list | grep proot-distro | wc -l) -eq 0 ]; then
         setup_termux
     fi
 
-    # ensure rootfs from backup
+    # ensure proot image from backup
     if [ ! -d "$DISTRO_ROOTFS" ]; then
         restore_distro
     fi
 
-    # ensure user profile
-    setup_distro_user
+    # setup distro user profile and apps if not exist
+    if [ ! -d $DISTRO_ROOTFS/home/$DISTRO_USER ] ; then
+        setup_distro_user
+        setup_user_apps
+        restore_profile
+    fi
+
 }
 
 login() {
-    [ ! "$1" == "" ] && LOGIN_USER="$1" || LOGIN_USER="root"
+    [ "$1" == "" ] && LOGIN_PARAM="" || LOGIN_PARAM="--user $1"
     precheck 
-    $DISTRO_LOGIN --user $LOGIN_USER
+    $DISTRO_LOGIN $LOGIN_PARAM
 }
 
 start_x11() {
     echo "Starting x11 for $DISTRO ..."
-    [ ! "$1" == "" ] && LOGIN_USER="$1" || LOGIN_USER=$DISTRO_USER
     precheck
     pulseaudio --start --exit-idle-time=-1 --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1"
     am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity
@@ -173,10 +182,11 @@ start_x11() {
 
 backup_distro() {
     # Specify distro backup name
+    NOW=$(date '+%Y%m%d-%H%M%S')
     if [ "$1" == "" ]; then
-        DISTRO_BACKUP=$DISTRO_BACKUP_DIR/$DISTRO-base.tar.gz
+        DISTRO_BACKUP=$DISTRO_BACKUP_DIR/$DISTRO-base-$NOW.tar.gz
     else
-        DISTRO_BACKUP=$DISTRO_BACKUP_DIR/$DISTRO-$1.tar.gz
+        DISTRO_BACKUP=$DISTRO_BACKUP_DIR/$DISTRO-$1-$NOW.tar.gz
     fi
     echo "Backup $DISTRO image to $DISTRO_BACKUP"
     proot-distro backup $DISTRO --output $DISTRO_BACKUP
@@ -189,6 +199,8 @@ restore_distro() {
     else
         DISTRO_BACKUP=$DISTRO_BACKUP_DIR/$DISTRO-$1.tar.gz
     fi
+
+    # restore distro from backup
     echo "Restore $DISTRO image from $DISTRO_BACKUP"
     if [ -e "$DISTRO_BACKUP" ]; then
         proot-distro restore $DISTRO_BACKUP
@@ -200,12 +212,13 @@ restore_distro() {
 }
 
 backup_profile() {
+    NOW=$(date '+%Y%m%d-%H%M%S')
     if [ "$1" == "" ]; then
-        DISTRO_PROFILE=$DISTRO_PROFILE_DIR/$DISTRO-profile.tar.gz
-        TERMUX_PROFILE=$DISTRO_PROFILE_DIR/termux-profile.tar.gz
+        DISTRO_PROFILE=$DISTRO_PROFILE_DIR/$DISTRO-profile-$NOW.tar.gz
+        TERMUX_PROFILE=$DISTRO_PROFILE_DIR/termux-profile-$NOW.tar.gz
     else
-        DISTRO_PROFILE=$DISTRO_PROFILE_DIR/$DISTRO-$1.tar.gz
-        TERMUX_PROFILE=$DISTRO_PROFILE_DIR/termux-$1.tar.gz
+        DISTRO_PROFILE=$DISTRO_PROFILE_DIR/$DISTRO-$1-$NOW.tar.gz
+        TERMUX_PROFILE=$DISTRO_PROFILE_DIR/termux-$1-$NOW.tar.gz
     fi
 
     # Check if termux profile exists
@@ -221,7 +234,9 @@ backup_profile() {
         echo "Skip backup existed $DISTRO_PROFILE"
     else
         echo "Backup $DISTRO profile to $DISTRO_PROFILE"
-        tar -czf $DISTRO_PROFILE -C $DISTRO_USER_HOME .config .vscode 
+        pushd $DISTRO_USER_HOME
+        tar -czf $DISTRO_PROFILE -C $DISTRO_USER_HOME --exclude=".cache" --exclude=".dbus" .*
+        popd
     fi
 }
 
@@ -235,9 +250,9 @@ restore_profile() {
     # Check if distro profile exists
     if [ -e $DISTRO_PROFILE ]; then
         echo "Restore user profile from $DISTRO_PROFILE"
-        tar -xzvf $DISTRO_PROFILE -C $DISTRO_USER_HOME 
+        tar -xzf $DISTRO_PROFILE -C $DISTRO_USER_HOME 
     else
-        echo "Skipped! Not found $DISTRO_PROFILE"
+        echo "Skipped restoring user profile. Not found $DISTRO_PROFILE"
     fi
 }
 

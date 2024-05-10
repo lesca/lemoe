@@ -6,3 +6,8 @@ init_distro() {
     $DISTRO_LOGIN -- pacman -Syyu --noconfirm
     $DISTRO_LOGIN -- pacman -S --noconfirm $PKGS
 }
+
+# clean up distro
+cleanup_distro() {
+    $DISTRO_LOGIN -- bash -c "yes | pacman -Scc"
+}

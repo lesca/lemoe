@@ -46,20 +46,20 @@ done
 # Check the first command line argument
 case "$1" in
   start|x11)
-    start_x11 
+    start_x11
     ;;
-  build)
-    build $2
+  restore)
+    proot-distro remove $DISTRO
+    precheck
     ;;
   reset)
     proot-distro remove $DISTRO
-    restore_distro
     ;;
   *)
     [ "$1" == "" ] && start_x11
     COMMAND=$1
     shift
-    echo "Run command: $COMMAND $@"
+    # echo "Run command: $COMMAND $@"
     $COMMAND $@
     ;;
 esac

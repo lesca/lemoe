@@ -10,7 +10,7 @@ install_sys() {
 setup_sys() {
     # remove power manager
     $DISTRO_LOGIN -- apt remove -y --purge xfce4-power-manager xfce4-screensaver
-    $DISTRO_LOGIN -- apt autoremove
+    $DISTRO_LOGIN -- apt autoremove -y
 
     # set timezone 
     $DISTRO_LOGIN -- ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 
