@@ -41,7 +41,7 @@ git clone https://github.com/lesca/lemoe.git
 5. 首次运行
 
 ```
-termux-change-repo && pkg install termux-am && termux-setup-storage && ln -s storage/documents/lemoe && bash lemoe/lemoe.sh
+termux-change-repo && pkg install termux-am && termux-setup-storage && ln -sf storage/documents/lemoe && bash lemoe/lemoe.sh
 ```
 
 > [!TIP]

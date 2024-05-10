@@ -41,7 +41,7 @@ Optionally, you can build your own image by running `lemoe.sh build`.
 5. Your first run
 
 ```
-termux-change-repo && pkg install termux-am && termux-setup-storage && ln -s storage/documents/lemoe && bash lemoe/lemoe.sh
+termux-change-repo && pkg install termux-am && termux-setup-storage && ln -sf storage/documents/lemoe && bash lemoe/lemoe.sh
 ```
 
 > [!TIP]
