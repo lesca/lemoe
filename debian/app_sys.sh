@@ -1,7 +1,7 @@
 # install software
 install_sys() {
     PKGS_XFCE4="xfce4 xfce4-goodies pavucontrol"
-    PKGS_FONTS="ttf-wqy-microhei ttf-wqy-zenhei xfonts-wqy ttf-mscorefonts-installer"
+    PKGS_FONTS="ttf-wqy-microhei ttf-wqy-zenhei xfonts-wqy"
 
     $DISTRO_LOGIN -- bash -c "DEBIAN_FRONTEND=noninteractive apt install -y $PKGS_XFCE4 $PKGS_FONTS"
 }

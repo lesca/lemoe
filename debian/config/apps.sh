@@ -4,4 +4,5 @@ apps_install=(\
 "ime" \
 "chromium" \
 "vscode" \
+"fonts" \
 )

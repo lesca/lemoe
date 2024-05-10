@@ -59,21 +59,39 @@ install_distro() {
 }
 
 setup_distro_user() {
+    # return if user already setup
+    if [ "$LOGIN_USER" == "root" ] || [ -d $DISTRO_ROOTFS/home/$LOGIN_USER ] ; then
+        echo "Login as user $LOGIN_USER ..."
+        return
+    fi
+
+    # setup user
     ETC="$DISTRO_ROOTFS/etc"
-    LINE="$DISTRO_USER ALL=(ALL:ALL) NOPASSWD: ALL"
+    LINE="$LOGIN_USER ALL=(ALL:ALL) NOPASSWD: ALL"
     FILE="$ETC/sudoers.d/$DISTRO"
 
-    echo "Setting up distro user $DISTRO_USER ..."
+    echo "Setting up distro user $LOGIN_USER ..."
 
     # create a new user
-    $DISTRO_LOGIN -- useradd -m -G root -s /bin/bash $DISTRO_USER
+    $DISTRO_LOGIN -- useradd -m -G root -s /bin/bash $LOGIN_USER
 
     # enable sudo for this user
     touch $FILE
     if ! grep -q "$LINE" $FILE; then
         echo "$LINE" >> $FILE
     fi
-    echo "Done."
+
+    # user environment setup
+    for app in "${apps_install[@]}"; do
+        if declare -F | grep -q " setup_user_$app$"; then
+            echo "Post setup $app for user..."
+            setup_cmd="setup_user_$app"
+            $setup_cmd
+        fi
+    done
+
+    # Finished
+    echo "Finished."
 }
 
 build() {
@@ -129,23 +147,24 @@ precheck() {
     fi
 
     # ensure user profile
-    if [ ! -d "$DISTRO_ROOTFS/home/$DISTRO_USER" ]; then
-        setup_distro_user
-    fi
+    setup_distro_user
 }
 
 login() {
-    precheck
     [ ! "$1" == "" ] && LOGIN_USER="$1" || LOGIN_USER="root"
+    precheck 
     $DISTRO_LOGIN --user $LOGIN_USER
 }
 
 start_x11() {
     echo "Starting x11 for $DISTRO ..."
+    [ ! "$1" == "" ] && LOGIN_USER="$1" || LOGIN_USER=$DISTRO_USER
     precheck
     pulseaudio --start --exit-idle-time=-1 --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1"
     am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity
     $DISTRO_LOGIN --user $DISTRO_USER -- termux-x11 :1 -xstartup "dbus-launch --exit-with-session startxfce4"
+
+    # clean up
     echo "Cleaning up ..."
     killall -9 pulseaudio 2>/dev/null
     echo "Done."
