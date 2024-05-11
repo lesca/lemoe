@@ -149,12 +149,17 @@ precheck() {
     # ensure proot image from backup
     if [ ! -d "$DISTRO_ROOTFS" ]; then
         restore_distro
+        FLAG_NEED_RESTORE=1
     fi
 
     # setup distro user profile and apps if not exist
     if [ ! -d $DISTRO_ROOTFS/home/$DISTRO_USER ] ; then
         setup_distro_user
         setup_user_apps
+    fi
+
+    # restore user profile if image was restored
+    if [ ! -z "$FLAG_NEED_RESTORE" ]; then
         restore_profile
     fi
 
