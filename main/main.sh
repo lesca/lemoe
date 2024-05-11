@@ -226,7 +226,9 @@ backup_profile() {
         echo "Skip backup existed $TERMUX_PROFILE"
     else
         echo "Backup termux profile to $TERMUX_PROFILE"
-        tar -czf $TERMUX_PROFILE -C $HOME .*
+        pushd $HOME
+        tar -czf $TERMUX_PROFILE .*
+        popd
     fi
 
     # Check if distro profile exists
@@ -235,7 +237,7 @@ backup_profile() {
     else
         echo "Backup $DISTRO profile to $DISTRO_PROFILE"
         pushd $DISTRO_USER_HOME
-        tar -czf $DISTRO_PROFILE -C $DISTRO_USER_HOME --exclude=".cache" --exclude=".dbus" .*
+        tar -czf $DISTRO_PROFILE --exclude=".gnupg" --exclude=".cache" --exclude=".dbus" .*
         popd
     fi
 }
