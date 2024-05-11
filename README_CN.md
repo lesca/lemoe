@@ -49,6 +49,21 @@ termux-change-repo && pkg install termux-am && termux-setup-storage && ln -sf st
 
 # 使用方法
 
+## 命令指南
+
+| 命令                                  | 描述                                                         | 默认设置                                                    |
+| ------------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------- |
+| `lemoe.sh`                            | 启动 X11。                                                    | 默认启动 **debian**，并以 **Lemoe** 用户身份登录。可以通过 `lemoe.sh config` 修改。 |
+| `lemoe.sh config distro <distro>`     | 配置发行版。                                                  | 默认为 **debian**。配置文件位于 `~/.lemoe`。                |
+| `lemoe.sh config user <user>`         | 配置发行版用户。                                              | 默认用户为 **Lemoe**。配置文件位于 `~/.lemoe`。             |
+| `lemoe.sh build`                      | 构建自定义镜像。                                              | 默认发行版为 **debian**。可以通过 `lemoe.sh config` 修改。  |
+| `lemoe.sh reset`                      | 从安装位置删除配置的发行版。可以稍后恢复或重建。              | 默认情况下，它将删除在 `~/.lemoe` 中配置的发行版。         |
+| `lemoe.sh restore`                    | 分别恢复基础镜像和用户配置备份。用户配置将恢复到配置的用户。  | 默认情况下，它会查找以下文件：<br />基础镜像 `distro-backup/$DISTRO-base.tar.gz` <br />用户配置备份 `profile-backup/$DISTRO-profile.tar.gz`。 |
+| `lemoe.sh backup_distro [name]`       | 备份发行版镜像。用户配置也会保存到镜像文件中。确保用户配置干净，并删除临时文件和缓存，如果你想要一个金色镜像并分发它。 | 默认情况下，它将镜像 `$DISTRO-base-$NOW.tar.gz` 保存到 `lemoe/distro-backup` 文件夹。 |
+| `lemoe.sh backup_profile [name]`      | 分别备份 termux 配置和用户配置。                              | Termux 配置被保存为 `termux-profile-$NOW.tar.gz`。<br />用户配置被保存为 `$DISTRO-profile-$NOW.tar.gz`。<br />它们被保存到 `lemoe/profile-backup` 文件夹。 |
+| `lemoe.sh login [user_name]`          | 以 **root** 用户身份在命令行（bash）模式下登录配置的发行版。  | 默认登录用户为 **root**。                                   |
+
+
 ## 构建你自己的镜像
 
 确保你的设备能够顺畅访问 github，然后运行以下命令：
@@ -57,93 +72,21 @@ termux-change-repo && pkg install termux-am && termux-setup-storage && ln -sf st
 bash lemoe.sh build
 ``` 
 
-默认的用户名是 **lemoe**。如果你想用另一个用户名，可以在命令的末尾添加，像这样：
+默认的发行版是 **Debian**，用户名是 **Lemoe**。如果你想用其他设置，需要先 `config` 之后再 `build` ：
+
+配置发行版：
 
 ```
-bash lemoe.sh build your_name
+bash lemoe.sh config distro <archlinux|debian>
 ```
 
-用户名会被保存在 `.lemoe_user` 文件中，供下次运行使用。
-
-## 备份镜像
-
-运行以下命令来备份 Linux 镜像。这将包括系统中的所有文件以及用户的配置文件。镜像被保存在 `lemoe/distro-backup` 文件夹。
+配置用户名：
 
 ```
-bash lemoe.sh backup_distro
+bash lemoe.sh config user <your_name>
 ```
 
-默认的文件名是 `$DISTRO-base.tar.gz`，其中`$DISTRO`是环境中指定的发行版。
-
-例如，环境变量`DISTRO=debian`，那么文件名为`debian-base.tar.gz`。如果文件已存在，备份将失败。你需要删除该文件，或在命令末尾指定另一个名称来创建新的文件，如下所示：
-
-```
-bash lemoe.sh backup_distro name
-```
-
-本例中，它将保存为 `debian-name.tar.gz`。
-
-## 恢复镜像
-
-恢复 base 镜像：
-
-```
-bash lemoe.sh restore_distro
-```
-
-恢复自定义镜像：
-
-```
-bash lemoe.sh restore_distro name
-```
-
-## 备份和恢复配置文件
-
-```
-bash lemoe.sh backup_profile
-```
-
-此命令保存两个配置文件：
-
-* 发行版用户配置文件：备份 Linux 中 `$HOME` 目录的文件。
-  * 默认文件名为 `$DISTRO-profile.tar.gz`。
-  * 此备份可以通过 `bash lemoe.sh restore_profile` 手动恢复。
-* termux 用户配置文件：备份 termux 中 `$HOME` 目录的文件。
-  * 默认文件名为 `termux-profile.tar.gz`。
-  * 当执行 `setup_termux` 时，此备份会自动使用。
-  * 此备份可以通过 `bash lemoe.sh restore_termux` 手动恢复。
-
-所有备份文件都保存在 `lemoe/profile-backup` 文件夹。
-
-通常，你可以在命令末尾添加你的自定义名称，以创建自己的备份，以供进一步使用或测试。
-
-```
-bash lemoe.sh backup_profile name
-```
-
-如果你想恢复它，使用相同的名称。
-
-## 重置
-
-下面的命令将完全移除已安装的 Linux 系统，然后从 base 镜像中恢复。
-
-```
-bash lemoe.sh reset
-```
-
-## 登录
-
-默认情况下，以下命令以 root 身份登录。
-
-```
-bash lemoe.sh login
-```
-
-你可以指定另一个用户进行登录，例如：
-
-```
-bash lemoe.sh login Lemoe
-```
+配置会被保存在 `~/.lemoe` 文件中，供下次运行使用。
 
 
 # 故障排除

@@ -49,6 +49,20 @@ termux-change-repo && pkg install termux-am && termux-setup-storage && ln -sf st
 
 # Usage
 
+## Command Reference
+
+| Command                           | Description                                                  | Defaults                                                     |
+| --------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `lemoe.sh`                        | Start X11.                                                   | By default, it starts **debian**, and login as **Lemoe**. You can change this by `lemoe.sh config` |
+| `lemoe.sh config distro <distro>` | Config distro.                                               | Default is **debian**. Configuration file is `~/.lemoe`.     |
+| `lemoe.sh config user <user>`     | Config distro user.                                          | Default is **Lemoe**. Configuration file is `~/.lemoe`.      |
+| `lemoe.sh build`                  | Build custom image.                                          | Default distro is **debian**. You can change this by `lemoe.sh config`. |
+| `lemoe.sh reset`                  | Remove configured distro from installation location. You can restore or build it later. | By default, it removes the distro configured in `~/.lemoe`.  |
+| `lemoe.sh restore`                | Restore base image and profile backup respectively. User profile is restored to the configured user. | By default, it looks for the following files:<br />base image `distro-backup/$DISTRO-base.tar.gz` <br />profile backup `profile-backup/$DISTRO-profile.tar.gz`. |
+| `lemoe.sh backup_distro [name]`   | Backup distro image. User profile is also saved to the image file. Make sure user profile is clean, and remove temperary files and caches if you want a gold image and distribute it. | By default, it saves the image `$DISTRO-base-$NOW.tar.gz` to the `lemoe/distro-backup` folder. |
+| `lemoe.sh backup_profile [name]`  | Backup termux profile and user profile respectively.         | Termux profile is save as `termux-profile-$NOW.tar.gz`. <br />User profile is save as `$DISTRO-profile-$NOW.tar.gz`. <br />They are saved to the `lemoe/profile-backup` folder. |
+| `lemoe.sh login [user_name]`      | Login configured distribution in command line (bash) mode as **root**. | By default, login user is **root**.                          |
+
 ## Build your own image
 
 Make sure you have good Internet connectivity to github, and run below command:
@@ -57,94 +71,24 @@ Make sure you have good Internet connectivity to github, and run below command:
 bash lemoe.sh build
 ``` 
 
-By default, the user name is **lemoe**. If you want a different one, append it to the end, like this:
+By default, the Linux distribution is **Debian** and the user name is **Lemoe**. 
+
+If you want different ones, run `configure` before `build`:
+
+To configure the distribution:
 
 ```
-bash lemoe.sh build your_name
+bash lemoe.sh config distro <archlinux|debian>
 ```
 
-The user name is saved to `.lemoe_user` file for next run.
-
-## Backup image
-
-Run command below to backup Linux image. This includes all files in the system, as well as user's profile. The image is saved in `lemoe/distro-backup` folder.
+To configure the user name:
 
 ```
-bash lemoe.sh backup_distro
+bash lemoe.sh config user <your_name>
 ```
 
-By default, the file name is `$DISTRO-base.tar.gz`, where `$DISTRO` is the distribution you set. 
 
-For example, `DISTRO=debian`, then the file name is `debian-base.tar.gz`. If the file exists, backup will fail. You need to remove the file, or specify another name to the end of the command to create another one, like this:
-
-```
-bash lemoe.sh backup_distro name
-```
-
-In this case, it will save the image as `debian-name.tar.gz`
-
-## Restore image
-
-Restore the base image:
-
-```
-bash lemoe.sh restore_distro
-```
-
-Restore a custom image:
-
-```
-bash lemoe.sh restore_distro name
-```
-
-## Backup and restore profile
-
-```
-bash lemoe.sh backup_profile
-```
-
-This command saves two profiles:
-
-* distro user profile: backup files in `$HOME` of the prrot Linux. 
-  * Default file name is `$DISTRO-profile.tar.gz`.
-  * This backup can be manually restored by `bash lemoe.sh restore_profile`
-* termux user profile: backup files in `$HOME` of termux.
-  * Default file name is `termux-profile.tar.gz`.
-  * This backup is automatically used when `setup_termux` is executed. 
-  * This backup can be manually restored by `bash lemoe.sh restore_termux`
-
-Both backup files are saved in `lemoe/profile-backup` folder.
-
-As usual, you can append your custom name to the end to create your own backup for further use or testing purpose. 
-
-```
-bash lemoe.sh backup_profile name
-```
-
-Use the same name if you want to restore it.
-
-## Reset
-
-Command below removes the installed Linux system completely and restore it from base image.
-
-```
-bash lemoe.sh reset
-```
-
-## Login 
-
-By default, below command login as root.
-
-```
-bash lemoe.sh login
-```
-
-You can specify another user to login, e.g.:
-
-```
-bash lemoe.sh login Lemoe
-```
-
+The configuration is saved to `~/.lemoe`.
 
 # Troubleshooting
 
