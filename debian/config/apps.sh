@@ -5,4 +5,5 @@ apps_install=(\
 "chromium" \
 "vscode" \
 "fonts" \
+"wps" \
 )

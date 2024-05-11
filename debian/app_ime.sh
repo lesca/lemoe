@@ -6,7 +6,12 @@ install_ime() {
 
 # post setup after installation
 setup_ime() {
-    echo "Skip."
+    # export to environment
+    if ! grep -q "XMODIFIERS" $DISTRO_ROOTFS/etc/environment; then
+        echo "GTK_IM_MODULE=fcitx" >> $DISTRO_ROOTFS/etc/environment
+        echo "QT_IM_MODULE=fcitx" >> $DISTRO_ROOTFS/etc/environment
+        echo "XMODIFIERS=@im=fcitx" >> $DISTRO_ROOTFS/etc/environment
+    fi
 }
 
 # post user setup after installation

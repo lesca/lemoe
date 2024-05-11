@@ -109,37 +109,6 @@ build() {
     install_distro
 }
 
-config() {
-    # config file is .lemoe
-    if [ ! -f "$DISTRO_USER_CONFIG" ]; then
-        echo "DISTRO_USER=Lemoe" > $DISTRO_USER_CONFIG
-        echo "DISTRO=debian" >> $DISTRO_USER_CONFIG
-    fi
-
-    if [ "$2" == "" ]; then
-        echo "Empty parameter. Skip."
-        return
-    fi
-
-    case "$1" in
-      user)
-        DISTRO_USER=$2
-        grep -q "DISTRO_USER=" $DISTRO_USER_CONFIG \
-            && sed -i "s|DISTRO_USER=.*$|DISTRO_USER=$2|g" $DISTRO_USER_CONFIG \
-            || echo "DISTRO_USER=$2" >> $DISTRO_USER_CONFIG
-        ;;
-      distro)
-        DISTRO=$2
-        grep -q "DISTRO=" $DISTRO_USER_CONFIG \
-            && sed -i "s|DISTRO=.*$|DISTRO=$2|g" $DISTRO_USER_CONFIG \
-            || echo "DISTRO=$2" >> $DISTRO_USER_CONFIG
-        ;;
-      *)
-        echo "Invalid config parameter $1"
-        ;;
-    esac
-}
-
 precheck() {
     # ensure proot-distro is installed
     if [ $(dpkg --list | grep proot-distro | wc -l) -eq 0 ]; then
@@ -158,7 +127,7 @@ precheck() {
         setup_user_apps
     fi
 
-    # restore user profile if image was restored
+    # restore user profile if image was just restored
     if [ ! -z "$FLAG_NEED_RESTORE" ]; then
         restore_profile
     fi
@@ -172,11 +141,12 @@ login() {
 }
 
 start_x11() {
+    X11_ARGS='DISPLAY=:1'
     echo "Starting x11 for $DISTRO ..."
     precheck
     pulseaudio --start --exit-idle-time=-1 --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1"
     am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity
-    $DISTRO_LOGIN --user $DISTRO_USER -- termux-x11 :1 -xstartup "dbus-launch --exit-with-session startxfce4"
+    $DISTRO_LOGIN --user $DISTRO_USER -- termux-x11 :1 -dpi $DISTRO_DPI -xstartup "$X11_ARGS dbus-launch --exit-with-session startxfce4"
 
     # clean up
     echo "Cleaning up ..."
