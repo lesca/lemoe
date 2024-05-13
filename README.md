@@ -6,7 +6,7 @@
 
 This project is inspired by tmoe.
 
-An easy-to-use command-line tool to deploy ArchiLinux distribution with X11 in termux, with a single command. 
+An easy-to-use command-line tool to deploy Linux distribution with X11 in termux, with a single command. 
 
 ## Features:
 
