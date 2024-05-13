@@ -2,10 +2,7 @@
 install_ime() {
     PKGS="fcitx5 fcitx5-chinese-addons fcitx5-material-color"
     $DISTRO_LOGIN -- apt install -y $PKGS
-}
 
-# post setup after installation
-setup_ime() {
     # export to environment
     if ! grep -q "XMODIFIERS" $DISTRO_ROOTFS/etc/environment; then
         echo "GTK_IM_MODULE=fcitx" >> $DISTRO_ROOTFS/etc/environment

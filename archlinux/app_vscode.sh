@@ -8,10 +8,8 @@ install_vscode() {
 
     git clone https://aur.archlinux.org/visual-studio-code-bin.git $PREFIX/tmp/vscode
     $DISTRO_LOGIN --user $DISTRO_USER -- bash -c 'cd /tmp/vscode && makepkg -sri --noconfirm'
-}
 
-# post setup after installation
-setup_vscode() {
+    # setup shortcut
     sed -i "s|Exec=/usr/bin/code|Exec=/usr/bin/code --no-sandbox|g" \
         $DISTRO_ROOTFS/usr/share/applications/code.desktop
 }

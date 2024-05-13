@@ -6,4 +6,5 @@ apps_install=(\
 "vscode" \
 "fonts" \
 "wps" \
+"gpu" \
 )

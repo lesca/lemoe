@@ -6,7 +6,6 @@ setup_termux() {
 
     # Create dirs
     mkdir -p $DISTRO_BACKUP_DIR
-    mkdir -p $DISTRO_PROFILE_DIR
 
     # Restore termux user profile
     restore_termux
@@ -47,10 +46,6 @@ install_distro() {
         echo "Installing $app ..."
         install_cmd="install_$app"
         $install_cmd
-
-        echo "Post setup $app ..."
-        setup_cmd="setup_$app"
-        $setup_cmd
     done
 
     # setup distro user apps
@@ -161,7 +156,7 @@ backup_distro() {
     if [ "$1" == "" ]; then
         DISTRO_BACKUP=$DISTRO_BACKUP_DIR/$DISTRO-base-$NOW.tar.gz
     else
-        DISTRO_BACKUP=$DISTRO_BACKUP_DIR/$DISTRO-$1-$NOW.tar.gz
+        DISTRO_BACKUP=$DISTRO_BACKUP_DIR/$DISTRO-base-$1.tar.gz
     fi
     echo "Backup $DISTRO image to $DISTRO_BACKUP"
     proot-distro backup $DISTRO --output $DISTRO_BACKUP
@@ -172,7 +167,7 @@ restore_distro() {
     if [ "$1" == "" ]; then
         DISTRO_BACKUP=$DISTRO_BACKUP_DIR/$DISTRO-base.tar.gz
     else
-        DISTRO_BACKUP=$DISTRO_BACKUP_DIR/$DISTRO-$1.tar.gz
+        DISTRO_BACKUP=$DISTRO_BACKUP_DIR/$DISTRO-base-$1.tar.gz
     fi
 
     # restore distro from backup
@@ -189,11 +184,11 @@ restore_distro() {
 backup_profile() {
     NOW=$(date '+%Y%m%d-%H%M%S')
     if [ "$1" == "" ]; then
-        DISTRO_PROFILE=$DISTRO_PROFILE_DIR/$DISTRO-profile-$NOW.tar.gz
-        TERMUX_PROFILE=$DISTRO_PROFILE_DIR/termux-profile-$NOW.tar.gz
+        DISTRO_PROFILE=$DISTRO_BACKUP_DIR/$DISTRO-profile-$NOW.tar.gz
+        TERMUX_PROFILE=$DISTRO_BACKUP_DIR/termux-profile-$NOW.tar.gz
     else
-        DISTRO_PROFILE=$DISTRO_PROFILE_DIR/$DISTRO-$1-$NOW.tar.gz
-        TERMUX_PROFILE=$DISTRO_PROFILE_DIR/termux-$1-$NOW.tar.gz
+        DISTRO_PROFILE=$DISTRO_BACKUP_DIR/$DISTRO-profile-$1.tar.gz
+        TERMUX_PROFILE=$DISTRO_BACKUP_DIR/termux-profile-$1.tar.gz
     fi
 
     # Check if termux profile exists
@@ -219,9 +214,9 @@ backup_profile() {
 
 restore_profile() {
     if [ "$1" == "" ]; then
-        DISTRO_PROFILE=$DISTRO_PROFILE_DIR/$DISTRO-profile.tar.gz
+        DISTRO_PROFILE=$DISTRO_BACKUP_DIR/$DISTRO-profile.tar.gz
     else
-        DISTRO_PROFILE=$DISTRO_PROFILE_DIR/$DISTRO-$1.tar.gz
+        DISTRO_PROFILE=$DISTRO_BACKUP_DIR/$DISTRO-profile-$1.tar.gz
     fi
 
     # Check if distro profile exists
@@ -235,9 +230,9 @@ restore_profile() {
 
 restore_termux() {
     if [ "$1" == "" ]; then
-        TERMUX_PROFILE=$DISTRO_PROFILE_DIR/termux-profile.tar.gz
+        TERMUX_PROFILE=$DISTRO_BACKUP_DIR/termux-profile.tar.gz
     else
-        TERMUX_PROFILE=$DISTRO_PROFILE_DIR/termux-$1.tar.gz
+        TERMUX_PROFILE=$DISTRO_BACKUP_DIR/termux-profile-$1.tar.gz
     fi
 
     # Check if termux profile exists
