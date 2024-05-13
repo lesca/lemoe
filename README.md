@@ -51,16 +51,18 @@ termux-change-repo && pkg install termux-am && termux-setup-storage && ln -sf st
 
 ## Command Reference
 
+
+
 | Command                           | Description                                                  | Defaults                                                     |
 | --------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | `lemoe.sh`                        | Start X11.                                                   | By default, it starts **debian**, and login as **Lemoe**. You can change this by `lemoe.sh config` |
 | `lemoe.sh config distro <distro>` | Config distro.                                               | Default is **debian**. Configuration file is `~/.lemoe`.     |
 | `lemoe.sh config user <user>`     | Config distro user.                                          | Default is **Lemoe**. Configuration file is `~/.lemoe`.      |
+| `lemoe.sh config dpi <num>`       | Config distro DPI by specifying a number. 200 is recommended for a 2.5~3K display. | Default is 200.                                              |
 | `lemoe.sh build`                  | Build custom image.                                          | Default distro is **debian**. You can change this by `lemoe.sh config`. |
-| `lemoe.sh reset`                  | Remove configured distro from installation location. You can restore or build it later. | By default, it removes the distro configured in `~/.lemoe`.  |
-| `lemoe.sh restore`                | Restore base image and profile backup respectively. User profile is restored to the configured user. | By default, it looks for the following files:<br />base image `distro-backup/$DISTRO-base.tar.gz` <br />profile backup `profile-backup/$DISTRO-profile.tar.gz`. |
-| `lemoe.sh backup_distro [name]`   | Backup distro image. User profile is also saved to the image file. Make sure user profile is clean, and remove temperary files and caches if you want a gold image and distribute it. | By default, it saves the image `$DISTRO-base-$NOW.tar.gz` to the `lemoe/distro-backup` folder. |
-| `lemoe.sh backup_profile [name]`  | Backup termux profile and user profile respectively.         | Termux profile is save as `termux-profile-$NOW.tar.gz`. <br />User profile is save as `$DISTRO-profile-$NOW.tar.gz`. <br />They are saved to the `lemoe/profile-backup` folder. |
+| `lemoe.sh reset`                  | Remove the configured distro from installation location. You can `restore` or `build` it later. | By default, it removes the distro configured in `~/.lemoe`.  |
+| `lemoe.sh backup`                 | Backup distro base image, distro profile and termux profile respectively. For more information, refer to the [backup](/backups/README.md) page. | By default, it saves backups as below:<br />distro image: `backups/$DISTRO-base-yyyyMMdd-hhmmss.tar.gz` <br />distro profile: `backups/$DISTRO-profile-yyyyMMdd-hhmmss.tar.gz`.<br />termux profile: `backups/termux-profile-yyyyMMdd-hhmmss.tar.gz`. |
+| `lemoe.sh restore`                | Restore distro base image and distro profile respectively. The termux profile is restored only if this is the first run. For more information, refer to the [backup](/backups/README.md) page. | By default, it looks for the following files:<br />distro image: `backups/$DISTRO-base.tar.gz` <br />distro profile: `backups/$DISTRO-profile.tar.gz`. |
 | `lemoe.sh login [user_name]`      | Login configured distribution in command line (bash) mode as **root**. | By default, login user is **root**.                          |
 
 ## Build your own image
