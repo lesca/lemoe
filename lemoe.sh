@@ -37,6 +37,7 @@ case "$1" in
   backup)
     backup_distro
     backup_profile
+    backup_termux
     ;;
   restore)
     proot-distro remove $DISTRO

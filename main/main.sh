@@ -185,30 +185,37 @@ backup_profile() {
     NOW=$(date '+%Y%m%d-%H%M%S')
     if [ "$1" == "" ]; then
         DISTRO_PROFILE=$DISTRO_BACKUP_DIR/$DISTRO-profile-$NOW.tar.gz
-        TERMUX_PROFILE=$DISTRO_BACKUP_DIR/termux-profile-$NOW.tar.gz
     else
         DISTRO_PROFILE=$DISTRO_BACKUP_DIR/$DISTRO-profile-$1.tar.gz
+    fi
+
+    # Check if distro profile exists
+    echo "Backup $DISTRO profile to $DISTRO_PROFILE"
+    if [ -e $DISTRO_PROFILE ]; then
+        echo "Skip backup existed $DISTRO_PROFILE"
+    else
+        pushd $DISTRO_USER_HOME > /dev/null
+        tar -czf $DISTRO_PROFILE --exclude=".gnupg" --exclude=".cache" --exclude=".dbus" .*
+        popd > /dev/null
+    fi
+}
+
+backup_termux() {
+    NOW=$(date '+%Y%m%d-%H%M%S')
+    if [ "$1" == "" ]; then
+        TERMUX_PROFILE=$DISTRO_BACKUP_DIR/termux-profile-$NOW.tar.gz
+    else
         TERMUX_PROFILE=$DISTRO_BACKUP_DIR/termux-profile-$1.tar.gz
     fi
 
     # Check if termux profile exists
+    echo "Backup termux profile to $TERMUX_PROFILE"
     if [ -e $TERMUX_PROFILE ]; then
         echo "Skip backup existed $TERMUX_PROFILE"
     else
-        echo "Backup termux profile to $TERMUX_PROFILE"
-        pushd $HOME
+        pushd $HOME > /dev/null
         tar -czf $TERMUX_PROFILE .*
-        popd
-    fi
-
-    # Check if distro profile exists
-    if [ -e $DISTRO_PROFILE ]; then
-        echo "Skip backup existed $DISTRO_PROFILE"
-    else
-        echo "Backup $DISTRO profile to $DISTRO_PROFILE"
-        pushd $DISTRO_USER_HOME
-        tar -czf $DISTRO_PROFILE --exclude=".gnupg" --exclude=".cache" --exclude=".dbus" .*
-        popd
+        popd > /dev/null
     fi
 }
 
