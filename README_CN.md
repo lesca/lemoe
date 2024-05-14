@@ -64,7 +64,7 @@ termux-change-repo && pkg install termux-am && termux-setup-storage && ln -sf st
 | `lemoe.sh backup`                   | 分别备份发行版基础镜像、发行版配置文件和termux配置文件。更多信息，请参考[备份](/backups/README.md)页面。 | 默认情况下，备份保存如下：<br />发行版镜像：`backups/$DISTRO-base-yyyyMMdd-hhmmss.tar.gz` <br />发行版配置文件：`backups/$DISTRO-profile-yyyyMMdd-hhmmss.tar.gz`。<br />termux配置文件：`backups/termux-profile-yyyyMMdd-hhmmss.tar.gz`。 |
 | `lemoe.sh restore`                  | 分别恢复发行版基础镜像和发行版配置文件。如果这是第一次运行，也会恢复termux配置文件。更多信息，请参考[备份](/backups/README.md)页面。 | 默认情况下，它查找以下文件：<br />发行版镜像：`backups/$DISTRO-base.tar.gz` <br />发行版配置文件：`backups/$DISTRO-profile.tar.gz`。 |
 | `lemoe.sh login [user_name]`        | 以命令行（bash）模式登录配置的发行版，以**root**用户身份。    | 默认登录用户为**root**。                                     |
-| `lemoe.sh lazypack` | 对当前的发行版执行 `cleanup_distro` 清理，然后立即打包成懒人包，保存为 zip 文件。 | 默认包的名称格式为 `lemoe-$DISTRO-yyyyMMdd-hhmmss.zip`。<br />默认的包目录为 `$HOME/storage/documents/lazy-packs-lemoe`。 |
+| `lemoe.sh lazypack` | 立即对当前项目打包成懒人包，保存为 zip 文件。 | 默认包的名称格式为 `lemoe-$DISTRO-yyyyMMdd-hhmmss.zip`。<br />默认的包目录为 `$HOME/storage/documents/lazy-packs-lemoe`。 |
 
 ## 构建你自己的镜像
 

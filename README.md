@@ -67,7 +67,7 @@ termux-change-repo && pkg install termux-am && termux-setup-storage && ln -sf st
 | `lemoe.sh backup`                 | Backup distro base image, distro profile and termux profile respectively. For more information, refer to the [backup](/backups/README.md) page. | By default, it saves backups as below:<br />distro image: `backups/$DISTRO-base-yyyyMMdd-hhmmss.tar.gz` <br />distro profile: `backups/$DISTRO-profile-yyyyMMdd-hhmmss.tar.gz`.<br />termux profile: `backups/termux-profile-yyyyMMdd-hhmmss.tar.gz`. |
 | `lemoe.sh restore`                | Restore distro base image and distro profile respectively. The termux profile is restored only if this is the first run. For more information, refer to the [backup](/backups/README.md) page. | By default, it looks for the following files:<br />distro image: `backups/$DISTRO-base.tar.gz` <br />distro profile: `backups/$DISTRO-profile.tar.gz`. |
 | `lemoe.sh login [user_name]`      | Login configured distribution in command line (bash) mode as **root**. | By default, login user is **root**.                          |
-| `lemoe.sh lazypack` | Housekeeping the current distro with `cleanup_distro` and pack the lazy pack immediately, saved as zip file. | Default pack name is as `lemoe-$DISTRO-yyyyMMdd-hhmmss.zip`.<br />Default pack directory is `$HOME/storage/documents/lazy-packs-lemoe`. |
+| `lemoe.sh lazypack` | Pack the current project to a lazy pack immediately, saved as zip file. | Default pack name is as `lemoe-$DISTRO-yyyyMMdd-hhmmss.zip`.<br />Default pack directory is `$HOME/storage/documents/lazy-packs-lemoe`. |
 
 
 ## Build your own image

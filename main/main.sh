@@ -251,10 +251,16 @@ restore_termux() {
     fi
 }
 
-save_lazypack() {
+lazypack() {
     # init vars
     NOW=$(date '+%Y%m%d-%H%M%S')
     LAZY_PACKS_DIR=$HOME/storage/documents/lazy-packs-lemoe
+    mkdir -p $LAZY_PACKS_DIR
+
+    echo "Saving current project to $LAZY_PACKS_DIR/lemoe-$DISTRO-$NOW.zip ..." 
+    
+    # remove old lazy pack project directory
+    rm -rf $LAZY_PACKS_DIR/lemoe
 
     # copy project files and ditro backups
     rsync -a --delete --exclude='.git' \
@@ -283,4 +289,7 @@ EOL
     pushd $LAZY_PACKS_DIR > /dev/null
     zip -r "lemoe-$DISTRO-$NOW.zip" $LAZY_PACKS_DIR
     popd > /dev/null
+
+    # Finished
+    echo "Finished."
 }
