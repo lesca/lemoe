@@ -267,27 +267,11 @@ lazypack() {
         --include="backups/$DISTRO-base.tar.gz" \
         --include="backups/$DISTRO-profile.tar.gz" \
         --exclude='backups/*.tar.gz' \
-        $SCRIPT_DIR $LAZY_PACKS_DIR/lemoe
-
-    # init git repo for future updates with `git pull`
-    mkdir -p $LAZY_PACKS_DIR/lemoe/.git
-    cat > $LAZY_PACKS_DIR/lemoe/.git/config << EOL
-[core]
-    repositoryformatversion = 0
-    filemode = true
-    bare = false
-    logallrefupdates = true
-[remote "origin"]
-    url = https://github.com/lesca/lemoe.git
-    fetch = +refs/heads/main:refs/remotes/origin/main
-[branch "main"]
-    remote = origin
-    merge = refs/heads/main
-EOL
+        $SCRIPT_DIR $LAZY_PACKS_DIR
 
     # zip the lazy pack
     pushd $LAZY_PACKS_DIR > /dev/null
-    zip -r "lemoe-$DISTRO-$NOW.zip" $LAZY_PACKS_DIR
+    zip -0 -r "lemoe-$DISTRO-$NOW.zip" lemoe
     popd > /dev/null
 
     # Finished
