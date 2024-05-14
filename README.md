@@ -4,9 +4,12 @@
 
 **lemoe** is short for **lemon moe** (🍋萌)
 
-This project is inspired by tmoe.
+This project is inspired by **tmoe**.
 
-An easy-to-use command-line tool to deploy Linux distribution with X11 in termux, with a single command. 
+But unlike tmoe:
+* this project is aimed to provide an easy-to-use command-line tool to **build** and **deploy** Linux distribution within termux, with a single command.
+* this project provides interfaces for integrating applications, allowing you to automatically integrate your apps during the **build** process, after which you can easily redistribute the image.
+
 
 ## Features:
 
@@ -64,6 +67,8 @@ termux-change-repo && pkg install termux-am && termux-setup-storage && ln -sf st
 | `lemoe.sh backup`                 | Backup distro base image, distro profile and termux profile respectively. For more information, refer to the [backup](/backups/README.md) page. | By default, it saves backups as below:<br />distro image: `backups/$DISTRO-base-yyyyMMdd-hhmmss.tar.gz` <br />distro profile: `backups/$DISTRO-profile-yyyyMMdd-hhmmss.tar.gz`.<br />termux profile: `backups/termux-profile-yyyyMMdd-hhmmss.tar.gz`. |
 | `lemoe.sh restore`                | Restore distro base image and distro profile respectively. The termux profile is restored only if this is the first run. For more information, refer to the [backup](/backups/README.md) page. | By default, it looks for the following files:<br />distro image: `backups/$DISTRO-base.tar.gz` <br />distro profile: `backups/$DISTRO-profile.tar.gz`. |
 | `lemoe.sh login [user_name]`      | Login configured distribution in command line (bash) mode as **root**. | By default, login user is **root**.                          |
+| `lemoe.sh lazypack` | Housekeeping the current distro with `cleanup_distro` and pack the lazy pack immediately, saved as zip file. | Default pack name is as `lemoe-$DISTRO-yyyyMMdd-hhmmss.zip`.<br />Default pack directory is `$HOME/storage/documents/lazy-packs-lemoe`. |
+
 
 ## Build your own image
 
@@ -91,6 +96,13 @@ bash lemoe.sh config user <your_name>
 
 
 The configuration is saved to `~/.lemoe`.
+
+# Development Guide
+
+## General Steps
+
+1. clone this repo
+2. 
 
 # Troubleshooting
 

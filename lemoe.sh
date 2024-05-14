@@ -46,6 +46,10 @@ case "$1" in
   reset)
     proot-distro remove $DISTRO
     ;;
+  lazypack)
+    cleanup_distro
+    save_lazypack
+    ;;
   *)
     [ "$1" == "" ] && start_x11
     COMMAND=$1
