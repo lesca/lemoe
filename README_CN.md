@@ -90,6 +90,32 @@ bash lemoe.sh config user <your_name>
 
 配置会被保存在 `~/.lemoe` 文件中，供下次运行使用。
 
+# 开发指南
+
+## 添加一个新应用
+
+### 主要步骤
+
+你可以将自己的应用添加到相应的发行版文件夹中，例如 debian 或 archlinux。
+
+要添加一个新应用，请按照以下步骤操作：
+1. 创建一个名为 `app_xxx.sh` 的脚本文件，其中 **xxx** 代表你的应用名称。
+2. 在脚本中的 `install_xxx()` 函数中定义安装步骤。
+3. （可选）在脚本中的 `setup_user_xxx()` 函数中定义应用的用户配置。
+4. （可选）如果希望在 `build` 过程中自动安装该应用，将应用名称 **xxx** 添加到 `config/apps.sh` 文件中。
+
+### 示例
+
+以下是 **ime** 应用的示例。它定义在文件 `lemoe/debian/app_ime.sh` 中。
+
+* `install_ime()` 是用于安装该应用的函数。它以 **root** 身份运行。
+  * 你可以将 **ime** 替换为自己的应用名称。
+  * 你可以通过运行 `lemoe.sh install_ime` 进行测试。
+  * 在 `build` 过程中，如果在 `config/apps.sh` 文件中定义了该函数，它也会调用此函数。
+* `setup_user_ime()` 是用于在用户创建过程中设置应用的函数。它以发行版用户身份运行，默认情况下是 **Lemoe**。
+  * 你可以将 **ime** 替换为自己的应用名称。
+  * 你可以通过运行 `lemoe.sh setup_user_ime` 进行测试。
+  * 在用户创建过程中，如果在 `config/apps.sh` 文件中定义了该函数，它也会调用此函数。
 
 # 故障排除
 

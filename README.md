@@ -99,10 +99,52 @@ The configuration is saved to `~/.lemoe`.
 
 # Development Guide
 
-## General Steps
+## Add a new app
 
-1. clone this repo
-2. 
+### General Steps 
+
+You can add your own application into the corresponding distribution folder, e.g., debian or archlinux.
+
+To add a new app, follow the steps below:
+1. Create a script file named `app_xxx.sh` where **xxx** stands for your app name.
+2. Define the installation steps in the `install_xxx()` function within the script.
+3. (Optional) Define the user configuration for the application in the `setup_user_xxx()` function within the script.
+4. (Optional) Add the app name **xxx** to the `config/apps.sh` file, if you want it to be installed automatically during the `build` process.
+
+### Example
+
+Let's take the **ime** app for example. It's defined in this file: `lemoe/debian/app_ime.sh`.
+
+* `install_ime()` is the funcation to install the app. It runs as **root**.
+  * You can replace the **ime** with your own application name.
+  * You can call it with `lemoe.sh install_ime` for testing purpose.
+  * During the `build` progress, it also calls this function if it's defined in the `config/apps.sh` file.
+* `setup_user_ime()` is the function to setup the app during the user creation process. It runs as the distro user, by default it is **Lemoe**.
+  * You can replace the **ime** with your own application name.
+  * You can call it with `lemoe.sh setup_user_ime` for testing purpose.
+  * During the user creation process, it also calls this function if it's defined in the `config/apps.sh` file.
+
+
+```bash
+# install software
+install_ime() {
+    PKGS="fcitx5 fcitx5-chinese-addons fcitx5-material-color"
+    $DISTRO_LOGIN -- apt install -y $PKGS
+
+    # export to environment
+    if ! grep -q "XMODIFIERS" $DISTRO_ROOTFS/etc/environment; then
+        echo "GTK_IM_MODULE=fcitx" >> $DISTRO_ROOTFS/etc/environment
+        echo "QT_IM_MODULE=fcitx" >> $DISTRO_ROOTFS/etc/environment
+        echo "XMODIFIERS=@im=fcitx" >> $DISTRO_ROOTFS/etc/environment
+    fi
+}
+
+# post user setup after installation
+setup_user_ime() {
+    # auto start
+    $DISTRO_LOGIN --user $DISTRO_USER -- bash -c "mkdir -p ~/.config/autostart && cp /usr/share/applications/org.fcitx.Fcitx5.desktop ~/.config/autostart"
+}
+```
 
 # Troubleshooting
 
