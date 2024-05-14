@@ -117,6 +117,28 @@ bash lemoe.sh config user <your_name>
   * 你可以通过运行 `lemoe.sh setup_user_ime` 进行测试。
   * 在用户创建过程中，如果在 `config/apps.sh` 文件中定义了该函数，它也会调用此函数。
 
+
+```bash
+# install software
+install_ime() {
+    PKGS="fcitx5 fcitx5-chinese-addons fcitx5-material-color"
+    $DISTRO_LOGIN -- apt install -y $PKGS
+
+    # export to environment
+    if ! grep -q "XMODIFIERS" $DISTRO_ROOTFS/etc/environment; then
+        echo "GTK_IM_MODULE=fcitx" >> $DISTRO_ROOTFS/etc/environment
+        echo "QT_IM_MODULE=fcitx" >> $DISTRO_ROOTFS/etc/environment
+        echo "XMODIFIERS=@im=fcitx" >> $DISTRO_ROOTFS/etc/environment
+    fi
+}
+
+# post user setup after installation
+setup_user_ime() {
+    # auto start
+    $DISTRO_LOGIN --user $DISTRO_USER -- bash -c "mkdir -p ~/.config/autostart && cp /usr/share/applications/org.fcitx.Fcitx5.desktop ~/.config/autostart"
+}
+```
+
 # 故障排除
 
 ## 没有声音
