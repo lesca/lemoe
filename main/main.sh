@@ -254,7 +254,7 @@ restore_termux() {
 lazypack() {
     # init vars
     NOW=$(date '+%Y%m%d-%H%M%S')
-    LAZY_PACKS_DIR=$HOME/storage/documents/lazy-packs-lemoe
+    LAZY_PACKS_DIR=$SCRIPT_DIR/../lazy-packs-lemoe
     mkdir -p $LAZY_PACKS_DIR
 
     echo "Saving current project to $LAZY_PACKS_DIR/lemoe-$DISTRO-$NOW.zip ..." 

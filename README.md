@@ -29,7 +29,7 @@ But unlike tmoe:
 
 3. Clone this repo
 
-Clone the repo to the `Documents` folder on your device. Step 5 is based on this assumuption. 
+Clone the repo to the `Download` folder on your device. Step 5 is based on this assumuption. 
 
 ```
 git clone https://github.com/lesca/lemoe.git
@@ -44,7 +44,7 @@ Optionally, you can build your own image by running `lemoe.sh build`.
 5. Your first run
 
 ```
-termux-change-repo && pkg install termux-am && termux-setup-storage && ln -sf storage/documents/lemoe && bash lemoe/lemoe.sh
+termux-change-repo && pkg install termux-am && termux-setup-storage && ln -sf storage/downloads/lemoe && bash lemoe/lemoe.sh
 ```
 
 > [!TIP]
@@ -67,7 +67,7 @@ termux-change-repo && pkg install termux-am && termux-setup-storage && ln -sf st
 | `lemoe.sh backup`                 | Backup distro base image, distro profile and termux profile respectively. For more information, refer to the [backup](/backups/README.md) page. | By default, it saves backups as below:<br />distro image: `backups/$DISTRO-base-yyyyMMdd-hhmmss.tar.gz` <br />distro profile: `backups/$DISTRO-profile-yyyyMMdd-hhmmss.tar.gz`.<br />termux profile: `backups/termux-profile-yyyyMMdd-hhmmss.tar.gz`. |
 | `lemoe.sh restore`                | Restore distro base image and distro profile respectively. The termux profile is restored only if this is the first run. For more information, refer to the [backup](/backups/README.md) page. | By default, it looks for the following files:<br />distro image: `backups/$DISTRO-base.tar.gz` <br />distro profile: `backups/$DISTRO-profile.tar.gz`. |
 | `lemoe.sh login [user_name]`      | Login configured distribution in command line (bash) mode as **root**. | By default, login user is **root**.                          |
-| `lemoe.sh lazypack` | Pack the current project to a lazy pack immediately, saved as zip file. | Default pack name is as `lemoe-$DISTRO-yyyyMMdd-hhmmss.zip`.<br />Default pack directory is `$HOME/storage/documents/lazy-packs-lemoe`. |
+| `lemoe.sh lazypack` | Pack the current project to a lazy pack immediately, saved as zip file. | Default pack name is as `lemoe-$DISTRO-yyyyMMdd-hhmmss.zip`.<br />Default pack directory is `../lazy-packs-lemoe`. |
 
 
 ## Build your own image
