@@ -2,10 +2,10 @@
 apps_install=(\
 "sys" \
 "ime" \
-"productivity" \
 "chromium" \
 "vscode" \
 "fonts" \
+"prod" \
 "wps" \
 "gpu" \
 )
