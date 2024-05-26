@@ -264,6 +264,7 @@ lazypack() {
 
     # copy project files and ditro backups
     rsync -a --delete --exclude='.git' \
+        --exclude='packages' \
         --include="backups/$DISTRO-base.tar.gz" \
         --include="backups/$DISTRO-profile.tar.gz" \
         --exclude='backups/*.tar.gz' \

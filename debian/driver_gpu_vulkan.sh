@@ -1,7 +1,7 @@
 # install software
 install_gpu() {
     PKG="mesa-vulkan-kgsl_24.1.0-devel-20240120_arm64.deb"
-    PKGS_DIR=$SCRIPT_DIR/../packages
+    PKGS_DIR=$SCRIPT_DIR/packages
     [ -f "$PKGS_DIR/$PKG" ] && cp $PKGS_DIR/$PKG $TMPDIR
     [ -f "$TMPDIR/$PKG" ] && $DISTRO_LOGIN -- apt install -f $TMPDIR/$PKG
 
