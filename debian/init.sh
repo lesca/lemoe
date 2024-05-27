@@ -2,7 +2,7 @@
 init_distro() {
     # init apps_install
     apps_install=""
-    
+
     # load apps functions and append apps to apps_install
     for filename in $(ls -1 $SCRIPT_DIR/$DISTRO/[0-9]*.sh); do
         source "$filename"

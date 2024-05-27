@@ -42,7 +42,7 @@ install_distro() {
     setup_distro_user
 
     # install apps
-    for app in "${apps_install[@]}"; do
+    for app in $apps_install; do
         echo "Installing $app ..."
         install_cmd="install_$app"
         $install_cmd
