@@ -23,10 +23,8 @@ DISTRO_BACKUP_DIR="$SCRIPT_DIR/backups"
 DISTRO_USER_HOME=$DISTRO_ROOTFS/home/$DISTRO_USER
 
 # source functions
-for file in $SCRIPT_DIR/main/*.sh $SCRIPT_DIR/$DISTRO/config/*.sh $SCRIPT_DIR/$DISTRO/*.sh; do
-    if [ -f "$file" ]; then
-        source "$file"
-    fi
+for file in $SCRIPT_DIR/main/*.sh $SCRIPT_DIR/$DISTRO/init.sh; do
+    source "$file"
 done
 
 # Check the first command line argument
