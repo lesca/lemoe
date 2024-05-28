@@ -24,7 +24,9 @@ DISTRO_USER_HOME=$DISTRO_ROOTFS/home/$DISTRO_USER
 
 # source functions
 for file in $SCRIPT_DIR/main/*.sh $SCRIPT_DIR/$DISTRO/init.sh; do
-    source "$file"
+    if [ -f "$file" ]; then
+        source "$file"
+    fi
 done
 
 # Check the first command line argument
