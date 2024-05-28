@@ -136,7 +136,7 @@ login() {
 }
 
 start_x11() {
-    X11_ARGS='DISPLAY=:1'
+    X11_ARGS="DISPLAY=:1 QT_FONT_DPI=$DISTRO_DPI"
     echo "Starting x11 for $DISTRO ..."
     precheck
     pulseaudio --start --exit-idle-time=-1 --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1"
