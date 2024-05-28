@@ -33,9 +33,9 @@ case "$1" in
     start_x11
     ;;
   backup)
-    backup_distro
-    backup_profile
-    backup_termux
+    backup_distro $2
+    backup_profile $2
+    backup_termux $2
     ;;
   restore)
     proot-distro remove $DISTRO
