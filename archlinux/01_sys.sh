@@ -10,4 +10,7 @@ install_sys() {
 
     # set timezone 
     $DISTRO_LOGIN -- ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 
+
+    # set machine-id
+    $DISTRO_LOGIN -- bash -c 'uuidgen | tr -d "-" > /etc/machine-id'
 }

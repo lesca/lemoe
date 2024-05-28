@@ -6,8 +6,7 @@ install_vscode() {
         return
     fi
 
-    git clone https://aur.archlinux.org/visual-studio-code-bin.git $PREFIX/tmp/vscode
-    $DISTRO_LOGIN --user $DISTRO_USER -- bash -c 'cd /tmp/vscode && makepkg -sri --noconfirm'
+    $DISTRO_LOGIN --user $DISTRO_USER -- yay --noconfirm -S visual-studio-code-bin
 
     # setup shortcut
     sed -i "s|Exec=/usr/bin/code|Exec=/usr/bin/code --no-sandbox|g" \
