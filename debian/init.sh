@@ -7,7 +7,6 @@ for filename in $(ls -1 $SCRIPT_DIR/$DISTRO/[0-9]*.sh); do
     extracted=$(echo "$filename" | awk -F'[_.]' '{print $2}')
     apps_install+="$extracted "
 done
-echo "Discovered apps: $apps_install"
 
 # init setup for distribution
 init_distro() {
