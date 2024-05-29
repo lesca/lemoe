@@ -79,7 +79,7 @@ setup_distro_user() {
 
 setup_user_apps() {
     # user apps post setup
-    for app in "${apps_install[@]}"; do
+    for app in $apps_install; do
         if declare -F | grep -q " setup_user_$app$"; then
             echo "Post setup $app for user $DISTRO_USER ..."
             setup_cmd="setup_user_$app"
