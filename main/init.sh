@@ -9,37 +9,30 @@ config() {
         echo "DISTRO_DPI=200" >> $DISTRO_USER_CONFIG
     fi
 
-    # load config
-    if [ "$1" == "load" ]; then
-        source $DISTRO_USER_CONFIG
-    fi
-
-    # other commands require parameters
-    if [ "$2" == "" ]; then
-        return
-    fi
-
     case "$1" in
+      load)
+        source $DISTRO_USER_CONFIG
+        ;;
       user)
-        DISTRO_USER=$2
+        [ "$2" != "" ] && DISTRO_USER=$2 || return 
         grep -q "DISTRO_USER=" $DISTRO_USER_CONFIG \
             && sed -i "s|DISTRO_USER=.*$|DISTRO_USER=$2|g" $DISTRO_USER_CONFIG \
             || echo "DISTRO_USER=$2" >> $DISTRO_USER_CONFIG
         ;;
       distro)
-        DISTRO=$2
+        [ "$2" != "" ] && DISTRO=$2 || return
         grep -q "DISTRO=" $DISTRO_USER_CONFIG \
             && sed -i "s|DISTRO=.*$|DISTRO=$2|g" $DISTRO_USER_CONFIG \
             || echo "DISTRO=$2" >> $DISTRO_USER_CONFIG
         ;;
       dpi)
-        DISTRO_DPI=$2
+        [ "$2" != "" ] && DISTRO_DPI=$2 || return
         grep -q "DISTRO_DPI=" $DISTRO_USER_CONFIG \
             && sed -i "s|DISTRO_DPI=.*$|DISTRO_DPI=$2|g" $DISTRO_USER_CONFIG \
             || echo "DISTRO_DPI=$2" >> $DISTRO_USER_CONFIG
         ;;
       *)
-        echo "Invalid config parameter $1"
+        cat $DISTRO_USER_CONFIG
         ;;
     esac
 }
