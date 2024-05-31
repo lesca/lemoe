@@ -5,7 +5,7 @@ SCRIPT_DIR=$(dirname $(realpath "$0"))
 source $SCRIPT_DIR/main/init.sh
 
 # Load user config
-DISTRO_USER_CONFIG=$HOME/.lemoe
+DISTRO_USER_CONFIG=$SCRIPT_DIR/.lemoe
 config load
 touch $TMPDIR/devices
 
@@ -41,6 +41,7 @@ case "$1" in
     ;;
   restore)
     proot-distro remove $DISTRO
+    restore_distro $2
     precheck
     ;;
   reset)
