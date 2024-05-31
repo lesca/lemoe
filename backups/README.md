@@ -7,10 +7,11 @@ The default backup directory is `lemoe/backups`.
 
 The base images are used to restore a distribution quickly.
 
-You should put the base image in this folder. Supported based image names are like these:
+You should put the base image in this folder. Supported base image names are like these:
 
 * archlinux-base.tar.gz
-* debian-base.tar.gz
+* debian-base.tar.gz 
+* hunter-base.tar.gz - Kali
 
 ## Profile backups
 
@@ -23,7 +24,7 @@ The **distribution profile backup** in this format `$DISTRO-profile-tar.gz` can 
 * archlinux-profile.tar.gz
 * debian-profile.tar.gz
 
-The **termux profile backup** in this format `termux-profile-tar.gz` can be restored automatically. It automatically restores only if **lemoe** was setup in the first time. You can manually restoer it by running this command: `lemoe.sh restore_termux`.
+The **termux profile backup** in this format `termux-profile-tar.gz` is restored automatically only when **lemoe** was setup in the first time. You can manually restoer it by running this command: `lemoe.sh restore_termux`.
 
 ## Create backups with default names
 
@@ -62,7 +63,8 @@ You can restore the backups with
 lemoe.sh restore mybackup
 ```
 
-* It always resotres distro image and distro profile at the same time. 
+* It removes the existing distro if it's existing before restoring.
+* It resotres distro image only. 
 * For termux profile backup, it restores only if it's the first time to run `lemoe.sh`.
 
 To backup and restore manually, you can run:
