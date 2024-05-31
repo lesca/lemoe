@@ -13,11 +13,10 @@
 
 ## 特性：
 
-* Lemoe 通过一条命令即可部署并启动 Linux 发行版，并提供 X11 图形界面支持。
+* Lemoe 通过一条命令 `bash lemoe.sh` 即可部署并启动 Linux 发行版，并提供 X11 图形界面支持。
 * Lemoe 使用 `termux:x11` 来获得比 VNC 更好的图形性能。
 * Lemoe 注重生产力工具，预装了 chromium、vscode、fcitx5 等。
-* Lemoe 可以轻松 **备份/恢复** 发行版镜像。
-* Lemoe 可以轻松 **备份/恢复** 配置文件。
+* Lemoe 可以轻松 **备份/恢复** 发行版镜像和用户配置文件。
 
 
 # 快速开始
@@ -36,7 +35,7 @@ git clone https://github.com/lesca/lemoe.git
 
 4. 下载发行版镜像
 
-你可以[下载 base 镜像](https://github.com/lesca/lemoe/wiki/Download)，并将其放入 `lemoe/distro_backup` 文件夹。
+你可以[下载 base 镜像](https://github.com/lesca/lemoe/wiki/Download)，并将其放入 `lemoe/backups` 文件夹。
 
 另外，你也可以自行构建镜像，命令为 `lemoe.sh build`。
 
@@ -56,11 +55,11 @@ termux-change-repo && pkg install termux-am && termux-setup-storage && ln -sf st
 | 命令                                | 描述                                                         | 默认设置                                                     |
 | ----------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | `lemoe.sh`                          | 启动X11。                                                    | 默认启动**debian**，并以**Lemoe**用户登录。您可以通过`lemoe.sh config`更改。 |
-| `lemoe.sh config distro <distro>`   | 配置发行版。                                                 | 默认为**debian**。配置文件为`~/.lemoe`。                     |
-| `lemoe.sh config user <user>`       | 配置发行版用户。                                             | 默认用户为**Lemoe**。配置文件为`~/.lemoe`。                  |
+| `lemoe.sh config distro <distro>`   | 配置发行版。                                                 | 默认为**debian**。配置文件为`.lemoe`。                     |
+| `lemoe.sh config user <user>`       | 配置发行版用户。                                             | 默认用户为**Lemoe**。配置文件为`.lemoe`。                  |
 | `lemoe.sh config dpi <num>`         | 通过指定数字配置发行版DPI。对于2.5~3K显示器，建议使用200。    | 默认为200。                                                  |
 | `lemoe.sh build`                    | 构建自定义镜像。                                             | 默认发行版为**debian**。您可以通过`lemoe.sh config`更改。   |
-| `lemoe.sh reset`                    | 从安装位置删除配置的发行版。您可以稍后`restore`或`build`。            | 默认情况下，它会移除在`~/.lemoe`中配置的发行版。             |
+| `lemoe.sh reset`                    | 从安装位置删除配置的发行版。您可以稍后`restore`或`build`。            | 默认情况下，它会移除在`.lemoe`中配置的发行版。             |
 | `lemoe.sh backup`                   | 分别备份发行版基础镜像、发行版配置文件和termux配置文件。更多信息，请参考[备份](/backups/README.md)页面。 | 默认情况下，备份保存如下：<br />发行版镜像：`backups/$DISTRO-base-yyyyMMdd-hhmmss.tar.gz` <br />发行版配置文件：`backups/$DISTRO-profile-yyyyMMdd-hhmmss.tar.gz`。<br />termux配置文件：`backups/termux-profile-yyyyMMdd-hhmmss.tar.gz`。 |
 | `lemoe.sh restore`                  | 分别恢复发行版基础镜像和发行版配置文件。如果这是第一次运行，也会恢复termux配置文件。更多信息，请参考[备份](/backups/README.md)页面。 | 默认情况下，它查找以下文件：<br />发行版镜像：`backups/$DISTRO-base.tar.gz` <br />发行版配置文件：`backups/$DISTRO-profile.tar.gz`。 |
 | `lemoe.sh login [user_name]`        | 以命令行（bash）模式登录配置的发行版，以**root**用户身份。    | 默认登录用户为**root**。                                     |
@@ -88,7 +87,7 @@ bash lemoe.sh config distro <archlinux|debian>
 bash lemoe.sh config user <your_name>
 ```
 
-配置会被保存在 `~/.lemoe` 文件中，供下次运行使用。
+配置会被保存在 `.lemoe` 文件中，供下次运行使用。
 
 # 开发指南
 
@@ -99,23 +98,22 @@ bash lemoe.sh config user <your_name>
 你可以将自己的应用添加到相应的发行版文件夹中，例如 debian 或 archlinux。
 
 要添加一个新应用，请按照以下步骤操作：
-1. 创建一个名为 `app_xxx.sh` 的脚本文件，其中 **xxx** 代表你的应用名称。
-2. 在脚本中的 `install_xxx()` 函数中定义安装步骤。
-3. （可选）在脚本中的 `setup_user_xxx()` 函数中定义应用的用户配置。
-4. （可选）如果希望在 `build` 过程中自动安装该应用，将应用名称 **xxx** 添加到 `config/apps.sh` 文件中。
+1. 创建一个名为 `xx_app.sh` 的脚本文件，其中 **xx** 是一个两位数数字，数字越小，优先级越高；**app** 表示应用名称。
+2. 在脚本中的 `install_app()` 函数中定义安装步骤。
+3. （可选）在脚本中的 `setup_user_app()` 函数中定义应用的用户配置。
 
 ### 示例
 
-以下是 **ime** 应用的示例。它定义在文件 `lemoe/debian/app_ime.sh` 中。
+以下是 **ime** 应用的示例。它定义在文件 `lemoe/debian/02_ime.sh` 中。
 
 * `install_ime()` 是用于安装该应用的函数。它以 **root** 身份运行。
-  * 你可以将 **ime** 替换为自己的应用名称。
+  * 你需要将 **ime** 替换为自己的应用名称。
   * 你可以通过运行 `lemoe.sh install_ime` 进行测试。
-  * 在 `build` 过程中，如果在 `config/apps.sh` 文件中定义了该函数，它也会调用此函数。
-* `setup_user_ime()` 是用于在用户创建过程中设置应用的函数。它以发行版用户身份运行，默认情况下是 **Lemoe**。
-  * 你可以将 **ime** 替换为自己的应用名称。
+  * 在 `build` 过程中，会自动调用该函数安装应用。
+* `setup_user_ime()` 用于在用户创建过程中设置应用的函数。它以发行版用户身份运行，默认情况下是 **Lemoe**。
+  * 你需要将 **ime** 替换为自己的应用名称。
   * 你可以通过运行 `lemoe.sh setup_user_ime` 进行测试。
-  * 在用户创建过程中，如果在 `config/apps.sh` 文件中定义了该函数，它也会调用此函数。
+  * 在用户创建过程中，会自动调用该函数配置用户应用。
 
 
 ```bash
