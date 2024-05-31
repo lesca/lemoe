@@ -8,7 +8,9 @@ setup_termux() {
     mkdir -p $DISTRO_BACKUP_DIR
 
     # Restore termux user profile
-    restore_termux
+    if [ ! -f $HOME/.config ]; then
+        restore_termux
+    fi
 
     # Check if the package x11-repo is installed
     if [ $(dpkg --list | grep x11-repo | wc -l) -eq 0 ]; then
@@ -214,7 +216,7 @@ backup_termux() {
         echo "Skip backup existed $TERMUX_PROFILE"
     else
         pushd $HOME > /dev/null
-        tar -czf $TERMUX_PROFILE .*
+        tar -czf $TERMUX_PROFILE --exclude=".bash_history" --exclude=".cache" --exclude=".timerdir" .*
         popd > /dev/null
     fi
 }

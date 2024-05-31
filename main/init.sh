@@ -3,7 +3,7 @@
 config() {
     # config file is .lemoe
     if [ ! -f "$DISTRO_USER_CONFIG" ]; then
-        echo "Create config file ~/.lemoe"
+        echo "Create config file $DISTRO_USER_CONFIG"
         echo "DISTRO_USER=Lemoe" > $DISTRO_USER_CONFIG
         echo "DISTRO=debian" >> $DISTRO_USER_CONFIG
         echo "DISTRO_DPI=200" >> $DISTRO_USER_CONFIG
