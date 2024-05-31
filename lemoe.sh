@@ -40,7 +40,6 @@ case "$1" in
     backup_termux $2
     ;;
   restore)
-    proot-distro remove $DISTRO
     restore_distro $2
     precheck
     ;;

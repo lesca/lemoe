@@ -115,7 +115,6 @@ precheck() {
     # ensure proot image from backup
     if [ ! -d "$DISTRO_ROOTFS" ]; then
         restore_distro
-        FLAG_NEED_RESTORE=1
     fi
 
     # setup distro user profile and apps if not exist
@@ -123,12 +122,6 @@ precheck() {
         setup_distro_user
         setup_user_apps
     fi
-
-    # restore user profile if image was just restored
-    if [ ! -z "$FLAG_NEED_RESTORE" ]; then
-        restore_profile
-    fi
-
 }
 
 login() {
@@ -172,14 +165,26 @@ restore_distro() {
         DISTRO_BACKUP=$DISTRO_BACKUP_DIR/$DISTRO-base-$1.tar.gz
     fi
 
-    # restore distro from backup
-    echo "Restore $DISTRO image from $DISTRO_BACKUP"
-    if [ -e "$DISTRO_BACKUP" ]; then
-        proot-distro restore $DISTRO_BACKUP
-    else
+    # check distro backup file
+    if [ ! -e "$DISTRO_BACKUP" ]; then
         echo "Error: not found $DISTRO_BACKUP"
         echo "Tips: to build distro, run $0 build"
-	exit
+        exit
+    fi
+
+    # reset distro
+    if [ -d $DISTRO_ROOTFS ]; then
+        echo "Resetting existing distro $DISTRO"
+        proot-distro remove $DISTRO
+    fi
+
+    # restore distro
+    echo "Restore $DISTRO image from $DISTRO_BACKUP"
+    proot-distro restore $DISTRO_BACKUP
+
+    # restore distro profile if using base image
+    if [ "$1" == "" ]; then
+        restore_profile
     fi
 }
 
