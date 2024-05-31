@@ -104,6 +104,12 @@ build() {
     # build distro
     setup_termux
     install_distro
+
+    # backup distro
+    rm -f $DISTRO_BACKUP_DIR/$DISTRO-base-0.tar.gz
+    rm -f $DISTRO_BACKUP_DIR/$DISTRO-profile-0.tar.gz
+    backup_distro 0
+    backup_profile 0
 }
 
 precheck() {
