@@ -299,8 +299,9 @@ lazypack() {
     if [ -e "$SCRIPT_DIR/backups/$BACKUP_PROFILE" ]; then
         echo "Found profile backup $BACKUP_PROFILE"
     else
-        echo "Error: not found $BACKUP_PROFILE"
-        exit
+        echo "Warn: not found $BACKUP_PROFILE"
+        BACKUP_PROFILE=$DISTRO-profile.tar.gz
+        echo "Info: trying $BACKUP_PROFILE"
     fi
 
     echo "Saving current project to $LAZY_PACKS_DIR/lemoe-$DISTRO-$NOW.zip ..." 
