@@ -3,6 +3,11 @@
 
 The default backup directory is `lemoe/backups`.
 
+It contains three types of backups:
+* Base image backup: the Linux system image backup
+* Distro user profile backup: It contains dot files and folder in user's `$HOME` folder of the proot Linux, e.g., `.config` and `.bashrc` etc.
+* Termux user profile backup: It contains dot files and folder in Termux's `$HOME` folder, e.g., termux configurations in `.termux` folder.
+
 ## Base images
 
 The base images are used to restore a distribution quickly.
@@ -13,20 +18,51 @@ You should put the base image in this folder. Supported base image names are lik
 * debian-base.tar.gz 
 * hunter-base.tar.gz - Kali
 
+The command below restores both base image and its corresponding profile backup:
+
+```
+lemoe.sh restore
+```
+
+If you want to restore base image and its profile manually, run like this:
+
+```
+lemoe.sh restore_distro
+lemoe.sh restore_profile
+```
+
 ## Profile backups
 
 In **lemoe**, there are two types of profiles:
 * Distribution profile backup
 * Termux profile backup
 
-The **distribution profile backup** in this format `$DISTRO-profile-tar.gz` can be restored automatically, for example:
+### distribution profile backup
+The **distribution profile backup** in this format `$DISTRO-profile-tar.gz` can be restored automatically when the base image is restored. 
+
+Here are some examples of the profile backup:
 
 * archlinux-profile.tar.gz
 * debian-profile.tar.gz
 
-The **termux profile backup** in this format `termux-profile-tar.gz` is restored automatically only when **lemoe** was setup in the first time. You can manually restoer it by running this command: `lemoe.sh restore_termux`.
+You can manually restoer the termux profile by running this command: 
 
-## Create backups with default names
+```
+lemoe.sh restore_profile
+```
+
+### termux profile backup
+The default **termux profile backup** is named as `termux-profile-tar.gz`. 
+
+For the first run, if `.config` folder is missing in the Termux's environment, it will be restored automatically.
+
+You can manually restoer the termux profile by running this command: 
+
+```
+lemoe.sh restore_termux
+```
+
+## Create Backups with default names
 
 This command creates all kinds of backups (distribution image backup, distribution profile backup, and termux profile backup):
 
@@ -34,7 +70,7 @@ This command creates all kinds of backups (distribution image backup, distributi
 lemoe.sh backup
 ```
 
-New backups follow the naming convertions below:
+Without specifing a custom name, new backups follow the naming convertions as below:
 
 * Distribution Image: $DISTRO-base-yyyyMMdd-hhmmss.tar.gz
 * Distribution Profile: $DISTRO-profile-yyyyMMdd-hhmmss.tar.gz
@@ -44,7 +80,7 @@ Later, you can rename them by removing the date and time to make `lemoe.sh` pick
 
 ## Custom Backups
 
-You can specify a **name** to replace the date and time in the naming format. Here is an example:
+You can specify a **custom name** to replace the date and time in the naming format. Here is an example:
 
 
 ```
@@ -63,9 +99,8 @@ You can restore the backups with
 lemoe.sh restore mybackup
 ```
 
-* It removes the existing distro if it's existing before restoring.
-* It resotres distro image only. 
-* For termux profile backup, it restores only if it's the first time to run `lemoe.sh`.
+* It removes the existing proot distro if it's existed before restoring.
+* When you restore a custom backup, it resotres the distro image only. It is because the profile backup is part of the image that you just backed up.
 
 To backup and restore manually, you can run:
 ```
