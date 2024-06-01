@@ -106,10 +106,11 @@ build() {
     install_distro
 
     # backup distro
-    rm -f $DISTRO_BACKUP_DIR/$DISTRO-base-0.tar.gz
-    rm -f $DISTRO_BACKUP_DIR/$DISTRO-profile-0.tar.gz
     backup_distro 0
     backup_profile 0
+
+    # start x
+    start_x11
 }
 
 precheck() {
@@ -159,7 +160,15 @@ backup_distro() {
     else
         DISTRO_BACKUP=$DISTRO_BACKUP_DIR/$DISTRO-base-$1.tar.gz
     fi
+
+    # Check if distro profile exists
     echo "Backup $DISTRO image to $DISTRO_BACKUP"
+    if [ -e $DISTRO_BACKUP ]; then
+        echo "Replacing existing $DISTRO_BACKUP"
+        rm -f $DISTRO_BACKUP
+    fi
+
+    # backup distro
     proot-distro backup $DISTRO --output $DISTRO_BACKUP
 }
 
@@ -205,12 +214,14 @@ backup_profile() {
     # Check if distro profile exists
     echo "Backup $DISTRO profile to $DISTRO_PROFILE"
     if [ -e $DISTRO_PROFILE ]; then
-        echo "Skip backup existed $DISTRO_PROFILE"
-    else
-        pushd $DISTRO_USER_HOME > /dev/null
-        tar -czf $DISTRO_PROFILE --exclude=".gnupg" --exclude=".cache" --exclude=".dbus" .*
-        popd > /dev/null
+        echo "Replacing existing $DISTRO_PROFILE"
+        rm -f $DISTRO_PROFILE
     fi
+
+    # backup profile
+    pushd $DISTRO_USER_HOME > /dev/null
+    tar -czf $DISTRO_PROFILE --exclude=".gnupg" --exclude=".cache" --exclude=".dbus" .*
+    popd > /dev/null
 }
 
 backup_termux() {
@@ -270,6 +281,28 @@ lazypack() {
     LAZY_PACKS_DIR=$SCRIPT_DIR/../lazy-packs-lemoe
     mkdir -p $LAZY_PACKS_DIR
 
+    # using suffix backup or default
+    if [ "$1" == "" ]; then
+        SUFFIX=""
+    else
+        SUFFIX="-$1"
+    fi
+    BACKUP_BASE=$DISTRO-base$SUFFIX.tar.gz
+    BACKUP_PROFILE=$DISTRO-profile$SUFFIX.tar.gz
+
+    if [ -e "$SCRIPT_DIR/backups/$BACKUP_BASE" ]; then
+        echo "Found base image $BACKUP_BASE"
+    else
+        echo "Error: not found $BACKUP_BASE"
+        exit
+    fi
+    if [ -e "$SCRIPT_DIR/backups/$BACKUP_PROFILE" ]; then
+        echo "Found profile backup $BACKUP_PROFILE"
+    else
+        echo "Error: not found $BACKUP_PROFILE"
+        exit
+    fi
+
     echo "Saving current project to $LAZY_PACKS_DIR/lemoe-$DISTRO-$NOW.zip ..." 
     
     # remove old lazy pack project directory
@@ -278,13 +311,17 @@ lazypack() {
     # copy project files and ditro backups
     rsync -a --delete --exclude='.git' \
         --exclude='packages' \
-        --include="backups/$DISTRO-base.tar.gz" \
-        --include="backups/$DISTRO-profile.tar.gz" \
+        --include="backups/$BACKUP_BASE" \
+        --include="backups/$BACKUP_PROFILE" \
         --exclude='backups/*.tar.gz' \
         $SCRIPT_DIR $LAZY_PACKS_DIR
 
     # zip the lazy pack
     pushd $LAZY_PACKS_DIR > /dev/null
+    if [ -n "$SUFFIX" ]; then
+        mv lemoe/backups/$BACKUP_BASE lemoe/backups/$DISTRO-base.tar.gz
+        mv lemoe/backups/$BACKUP_PROFILE lemoe/backups/$DISTRO-profile.tar.gz
+    fi
     zip -0 -r "lemoe-$DISTRO-$NOW.zip" lemoe
     popd > /dev/null
 
